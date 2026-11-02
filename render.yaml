@@ -1,0 +1,19 @@
+# Configuración de Render (Blueprint). La base de datos está en Neon:
+# DATABASE_URL se carga a mano en el panel de Render y nunca se sube al repositorio.
+services:
+  - type: web
+    name: tfg-encuesta-ciberseguridad
+    runtime: python
+    plan: starter
+    region: virginia
+    branch: main
+    autoDeploy: true
+    buildCommand: pip install -r requirements.txt
+    preDeployCommand: flask --app wsgi db upgrade
+    startCommand: gunicorn wsgi:app --workers 2 --timeout 30
+    healthCheckPath: /salud
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        sync: false
