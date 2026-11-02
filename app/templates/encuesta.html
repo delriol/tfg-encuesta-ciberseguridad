@@ -12,6 +12,10 @@
   {% if errores %}
   <div class="alert alert-danger" role="alert">Hay {{ errores|length }} pregunta{{ 's' if errores|length > 1 }} para revisar. Están marcadas en rojo.</div>
   {% endif %}
+  <div class="progress mb-3" id="progreso" hidden role="progressbar" aria-label="Avance de la encuesta"
+       aria-valuemin="1" aria-valuemax="7" aria-valuenow="1">
+    <div class="progress-bar" id="barra-progreso"></div>
+  </div>
   {% for seccion, items_seccion in items|groupby("seccion") %}
   <section class="seccion mb-4" data-seccion="{{ seccion }}">
     <h2 class="h5 text-secondary">Sección {{ seccion }} de 7: {{ secciones[seccion|string] }}</h2>
@@ -53,6 +57,11 @@
     {% endfor %}
   </section>
   {% endfor %}
-  <div class="d-grid"><button class="btn btn-primary btn-lg" type="submit">Enviar respuestas</button></div>
+  <div class="d-flex gap-2 mb-2" id="navegacion" hidden>
+    <button type="button" class="btn btn-outline-secondary" id="btn-anterior">Anterior</button>
+    <button type="button" class="btn btn-primary ms-auto" id="btn-siguiente">Siguiente</button>
+  </div>
+  <div class="d-grid"><button class="btn btn-primary btn-lg" type="submit" id="btn-enviar">Enviar respuestas</button></div>
 </form>
 {% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='encuesta.js') }}"></script>{% endblock %}

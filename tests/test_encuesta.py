@@ -190,3 +190,11 @@ def test_publicada_sin_banner(base, client):
 def test_pausada_manual(base, client):
     publicar(cerrar=True)
     assert "cerró" in client.get("/").get_data(as_text=True)
+
+
+def test_encuesta_carga_navegacion_y_sin_estilos_en_linea(base, client):
+    aceptar(client)
+    html = client.get("/encuesta").get_data(as_text=True)
+    assert "encuesta.js" in html and 'id="btn-siguiente"' in html
+    assert "style=" not in html  # la CSP bloquea estilos en línea
+    assert html.count('class="seccion') == 7
