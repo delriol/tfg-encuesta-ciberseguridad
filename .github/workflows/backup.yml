@@ -1,0 +1,35 @@
+name: Backup diario de la base
+
+# Copia diaria de la base de Neon, cifrada, guardada como artefacto del repositorio por 30 días.
+# Requiere dos secretos del repositorio (Settings > Secrets and variables > Actions):
+#   DATABASE_URL       cadena de conexión de Neon
+#   BACKUP_PASSPHRASE  clave para cifrar la copia (guardala fuera de GitHub)
+# Para restaurar:  gpg -d backup.sql.gz.gpg | gunzip | psql "<cadena de conexión>"
+
+on:
+  schedule:
+    - cron: "0 9 * * *"   # 06:00 hora argentina
+  workflow_dispatch:
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Volcar, comprimir y cifrar
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          BACKUP_PASSPHRASE: ${{ secrets.BACKUP_PASSPHRASE }}
+        run: |
+          test -n "$DATABASE_URL" && test -n "$BACKUP_PASSPHRASE"
+          docker run --rm -e DATABASE_URL postgres:17 \
+            sh -c 'pg_dump --no-owner --no-privileges "$DATABASE_URL"' \
+            | gzip -9 \
+            | gpg --batch --yes --pinentry-mode loopback --passphrase "$BACKUP_PASSPHRASE" \
+                  --symmetric --cipher-algo AES256 -o backup.sql.gz.gpg
+          test -s backup.sql.gz.gpg
+          ls -l backup.sql.gz.gpg
+      - uses: actions/upload-artifact@v4
+        with:
+          name: backup-${{ github.run_number }}
+          path: backup.sql.gz.gpg
+          retention-days: 30
