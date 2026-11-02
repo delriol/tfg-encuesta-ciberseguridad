@@ -21,6 +21,11 @@ def create_app(config_object="app.config.Config"):
     migrate.init_app(app, db)
     csrf.init_app(app)
 
+    from . import models  # noqa: F401  (registra las tablas)
+    from .cli import registrar_comandos
+
+    registrar_comandos(app)
+
     @app.after_request
     def cabeceras_de_seguridad(resp):
         resp.headers.setdefault("Strict-Transport-Security", "max-age=31536000; includeSubDomains")

@@ -1,0 +1,1580 @@
+{
+ "version": "v03",
+ "fuente": "Anexo del documento de TFG v03 (27/10/2026), con las decisiones del 28/10",
+ "secciones": {
+  "1": "Datos generales",
+  "2": "Familiaridad",
+  "3": "Conocimiento",
+  "4": "Actitud",
+  "5": "Comportamiento",
+  "6": "Exposición",
+  "7": "Pregunta abierta"
+ },
+ "items": [
+  {
+   "codigo": "D1",
+   "seccion": 1,
+   "texto": "Edad",
+   "tipo_respuesta": "unica",
+   "obligatorio": true,
+   "respuesta_correcta": null,
+   "invertido": false,
+   "suma_al_indice": false,
+   "opciones": [
+    {
+     "codigo": "1",
+     "texto": "18 a 20",
+     "orden": 1
+    },
+    {
+     "codigo": "2",
+     "texto": "21 a 25",
+     "orden": 2
+    },
+    {
+     "codigo": "3",
+     "texto": "26 a 30",
+     "orden": 3
+    },
+    {
+     "codigo": "4",
+     "texto": "31 a 40",
+     "orden": 4
+    },
+    {
+     "codigo": "5",
+     "texto": "Más de 40",
+     "orden": 5
+    }
+   ],
+   "nota": "v03 dice 17 a 20; se aplica la decisión del 28/10 (solo mayores de 18)"
+  },
+  {
+   "codigo": "D2",
+   "seccion": 1,
+   "texto": "Género",
+   "tipo_respuesta": "unica",
+   "obligatorio": true,
+   "respuesta_correcta": null,
+   "invertido": false,
+   "suma_al_indice": false,
+   "opciones": [
+    {
+     "codigo": "1",
+     "texto": "Femenino",
+     "orden": 1
+    },
+    {
+     "codigo": "2",
+     "texto": "Masculino",
+     "orden": 2
+    },
+    {
+     "codigo": "3",
+     "texto": "No binario",
+     "orden": 3
+    },
+    {
+     "codigo": "4",
+     "texto": "Prefiero no decir",
+     "orden": 4
+    }
+   ]
+  },
+  {
+   "codigo": "D3",
+   "seccion": 1,
+   "texto": "Carrera",
+   "tipo_respuesta": "desplegable",
+   "obligatorio": true,
+   "respuesta_correcta": null,
+   "invertido": false,
+   "suma_al_indice": false,
+   "opciones": [
+    {
+     "codigo": "1",
+     "texto": "Abogacía",
+     "orden": 1,
+     "grupo": "Departamento de Ciencias Jurídicas y Sociales"
+    },
+    {
+     "codigo": "2",
+     "texto": "Licenciatura en Gestión Gubernamental",
+     "orden": 2,
+     "grupo": "Departamento de Ciencias Jurídicas y Sociales"
+    },
+    {
+     "codigo": "3",
+     "texto": "Licenciatura en Trabajo Social",
+     "orden": 3,
+     "grupo": "Departamento de Ciencias Jurídicas y Sociales"
+    },
+    {
+     "codigo": "4",
+     "texto": "Medicina",
+     "orden": 4,
+     "grupo": "Departamento de Ciencias de la Salud y el Deporte"
+    },
+    {
+     "codigo": "5",
+     "texto": "Licenciatura en Enfermería",
+     "orden": 5,
+     "grupo": "Departamento de Ciencias de la Salud y el Deporte"
+    },
+    {
+     "codigo": "6",
+     "texto": "Licenciatura en Instrumentación Quirúrgica",
+     "orden": 6,
+     "grupo": "Departamento de Ciencias de la Salud y el Deporte"
+    },
+    {
+     "codigo": "7",
+     "texto": "Licenciatura en Producción de Bioimágenes",
+     "orden": 7,
+     "grupo": "Departamento de Ciencias de la Salud y el Deporte"
+    },
+    {
+     "codigo": "8",
+     "texto": "Profesorado Universitario en Educación Física",
+     "orden": 8,
+     "grupo": "Departamento de Ciencias de la Salud y el Deporte"
+    },
+    {
+     "codigo": "9",
+     "texto": "Tecnicatura Universitaria en Informática Aplicada a la Salud",
+     "orden": 9,
+     "grupo": "Departamento de Ciencias de la Salud y el Deporte"
+    },
+    {
+     "codigo": "10",
+     "texto": "Tecnicatura Universitaria en Puericultura y Crianza",
+     "orden": 10,
+     "grupo": "Departamento de Ciencias de la Salud y el Deporte"
+    },
+    {
+     "codigo": "11",
+     "texto": "Ingeniería en Informática",
+     "orden": 11,
+     "grupo": "Departamento de Economía, Producción e Innovación Tecnológica"
+    },
+    {
+     "codigo": "12",
+     "texto": "Licenciatura en Gestión de Tecnologías de la Información",
+     "orden": 12,
+     "grupo": "Departamento de Economía, Producción e Innovación Tecnológica"
+    },
+    {
+     "codigo": "13",
+     "texto": "Licenciatura en Biotecnología",
+     "orden": 13,
+     "grupo": "Departamento de Economía, Producción e Innovación Tecnológica"
+    },
+    {
+     "codigo": "14",
+     "texto": "Licenciatura en Administración",
+     "orden": 14,
+     "grupo": "Departamento de Economía, Producción e Innovación Tecnológica"
+    },
+    {
+     "codigo": "15",
+     "texto": "Licenciatura en Producción y Desarrollo de Videojuegos",
+     "orden": 15,
+     "grupo": "Departamento de Economía, Producción e Innovación Tecnológica"
+    },
+    {
+     "codigo": "16",
+     "texto": "Licenciatura en Producción y Gestión Audiovisual",
+     "orden": 16,
+     "grupo": "Departamento de Economía, Producción e Innovación Tecnológica"
+    },
+    {
+     "codigo": "17",
+     "texto": "Tecnicatura Universitaria en Comercio Electrónico",
+     "orden": 17,
+     "grupo": "Departamento de Economía, Producción e Innovación Tecnológica"
+    },
+    {
+     "codigo": "18",
+     "texto": "Tecnicatura Universitaria en Tecnologías Industriales",
+     "orden": 18,
+     "grupo": "Departamento de Economía, Producción e Innovación Tecnológica"
+    },
+    {
+     "codigo": "19",
+     "texto": "Profesorado Universitario de Inglés",
+     "orden": 19,
+     "grupo": "Rectorado / Formación Docente"
+    },
+    {
+     "codigo": "20",
+     "texto": "Profesorado Universitario de Educación Especial con Orientación en Sordos e Hipoacúsicos",
+     "orden": 20,
+     "grupo": "Rectorado / Formación Docente"
+    },
+    {
+     "codigo": "21",
+     "texto": "Profesorado Universitario de Educación Especial con Orientación en Ciegos y Disminuidos Visuales",
+     "orden": 21,
+     "grupo": "Rectorado / Formación Docente"
+    },
+    {
+     "codigo": "22",
+     "texto": "Tecnicatura Universitaria en Educación Profesional",
+     "orden": 22,
+     "grupo": "Rectorado / Formación Docente"
+    }
+   ]
+  },
+  {
+   "codigo": "D4",
+   "seccion": 1,
+   "texto": "Nivel de avance en la carrera",
+   "tipo_respuesta": "unica",
+   "obligatorio": true,
+   "respuesta_correcta": null,
+   "invertido": false,
+   "suma_al_indice": false,
+   "opciones": [
+    {
+     "codigo": "1",
+     "texto": "Primer año",
+     "orden": 1
+    },
+    {
+     "codigo": "2",
+     "texto": "Avance intermedio",
+     "orden": 2
+    },
+    {
+     "codigo": "3",
+     "texto": "Último año",
+     "orden": 3
+    }
+   ]
+  },
+  {
+   "codigo": "D5",
+   "seccion": 1,
+   "texto": "Situación laboral actual (Seleccione una o más)",
+   "tipo_respuesta": "multiple",
+   "obligatorio": true,
+   "respuesta_correcta": null,
+   "invertido": false,
+   "suma_al_indice": false,
+   "opciones": [
+    {
+     "codigo": "1",
+     "texto": "Estudiante",
+     "orden": 1
+    },
+    {
+     "codigo": "2",
+     "texto": "Empleado",
+     "orden": 2
+    },
+    {
+     "codigo": "3",
+     "texto": "Monotributista",
+     "orden": 3
+    },
+    {
+     "codigo": "4",
+     "texto": "No trabajo",
+     "orden": 4
+    }
+   ],
+   "nota": "Textos y opciones literales de la v03 (decisión de Leandro 02/11)."
+  },
+  {
+   "codigo": "D6",
+   "seccion": 1,
+   "texto": "¿Recibiste alguna capacitación en ciberseguridad?",
+   "tipo_respuesta": "unica",
+   "obligatorio": true,
+   "respuesta_correcta": null,
+   "invertido": false,
+   "suma_al_indice": false,
+   "opciones": [
+    {
+     "codigo": "1",
+     "texto": "Sí",
+     "orden": 1
+    },
+    {
+     "codigo": "2",
+     "texto": "No estoy seguro/a",
+     "orden": 2
+    },
+    {
+     "codigo": "3",
+     "texto": "No",
+     "orden": 3
+    }
+   ]
+  },
+  {
+   "codigo": "Q1",
+   "seccion": 2,
+   "texto": "Seleccioná los conceptos que conozcas o te resulten familiares",
+   "tipo_respuesta": "multiple",
+   "obligatorio": false,
+   "respuesta_correcta": null,
+   "invertido": false,
+   "suma_al_indice": true,
+   "opciones": [
+    {
+     "codigo": "G1",
+     "texto": "Internet",
+     "orden": 1
+    },
+    {
+     "codigo": "G2",
+     "texto": "WiFi",
+     "orden": 2
+    },
+    {
+     "codigo": "G3",
+     "texto": "Base de Datos",
+     "orden": 3
+    },
+    {
+     "codigo": "G4",
+     "texto": "Sistema Operativo",
+     "orden": 4
+    },
+    {
+     "codigo": "G5",
+     "texto": "Código QR",
+     "orden": 5
+    },
+    {
+     "codigo": "G6",
+     "texto": "Informática",
+     "orden": 6
+    },
+    {
+     "codigo": "G7",
+     "texto": "Software",
+     "orden": 7
+    },
+    {
+     "codigo": "G8",
+     "texto": "Hardware",
+     "orden": 8
+    },
+    {
+     "codigo": "G9",
+     "texto": "Cloud",
+     "orden": 9
+    },
+    {
+     "codigo": "G10",
+     "texto": "Tecnologías de la Información",
+     "orden": 10
+    },
+    {
+     "codigo": "G11",
+     "texto": "Página web",
+     "orden": 11
+    },
+    {
+     "codigo": "G12",
+     "texto": "IA (Inteligencia Artificial)",
+     "orden": 12
+    },
+    {
+     "codigo": "G13",
+     "texto": "WhatsApp",
+     "orden": 13
+    },
+    {
+     "codigo": "G14",
+     "texto": "Instagram",
+     "orden": 14
+    },
+    {
+     "codigo": "G15",
+     "texto": "Facebook",
+     "orden": 15
+    },
+    {
+     "codigo": "G16",
+     "texto": "X (Twitter)",
+     "orden": 16
+    },
+    {
+     "codigo": "G17",
+     "texto": "Home Banking",
+     "orden": 17
+    },
+    {
+     "codigo": "S1",
+     "texto": "Backup",
+     "orden": 18
+    },
+    {
+     "codigo": "S2",
+     "texto": "Cifrado",
+     "orden": 19
+    },
+    {
+     "codigo": "S3",
+     "texto": "Ciberataque",
+     "orden": 20
+    },
+    {
+     "codigo": "S4",
+     "texto": "Ciberamenaza",
+     "orden": 21
+    },
+    {
+     "codigo": "S5",
+     "texto": "Ciberdelito",
+     "orden": 22
+    },
+    {
+     "codigo": "S6",
+     "texto": "Phishing",
+     "orden": 23
+    },
+    {
+     "codigo": "S7",
+     "texto": "Malware",
+     "orden": 24
+    },
+    {
+     "codigo": "S8",
+     "texto": "Ransomware",
+     "orden": 25
+    },
+    {
+     "codigo": "S9",
+     "texto": "Ingeniería Social",
+     "orden": 26
+    },
+    {
+     "codigo": "S10",
+     "texto": "Deep Fake",
+     "orden": 27
+    },
+    {
+     "codigo": "S11",
+     "texto": "Antivirus",
+     "orden": 28
+    },
+    {
+     "codigo": "S12",
+     "texto": "VPN",
+     "orden": 29
+    },
+    {
+     "codigo": "S13",
+     "texto": "Token",
+     "orden": 30
+    },
+    {
+     "codigo": "S14",
+     "texto": "2FA (Autenticación de doble factor)",
+     "orden": 31
+    },
+    {
+     "codigo": "S15",
+     "texto": "Firewall",
+     "orden": 32
+    }
+   ],
+   "nota": "Puntaje: solo los 15 términos S1 a S15; los G son control"
+  },
+  {
+   "codigo": "Q2",
+   "seccion": 2,
+   "texto": "Ciberseguridad: ¿qué opción te parece que define este concepto?",
+   "tipo_respuesta": "unica",
+   "obligatorio": true,
+   "respuesta_correcta": "2",
+   "invertido": false,
+   "suma_al_indice": true,
+   "opciones": [
+    {
+     "codigo": "1",
+     "texto": "Disciplina que se encarga de proteger la integridad y la privacidad de la información almacenada en sistemas informáticos de cibercriminales.",
+     "orden": 1
+    },
+    {
+     "codigo": "2",
+     "texto": "Práctica de defender las computadoras, dispositivos móviles, sistemas electrónicos, redes y los datos de ataques maliciosos.",
+     "orden": 2
+    },
+    {
+     "codigo": "3",
+     "texto": "Conjunto de medidas preventivas y reactivas que afectan el tratamiento de los datos almacenados y que permiten almacenar y proteger la información.",
+     "orden": 3
+    }
+   ]
+  },
+  {
+   "codigo": "K1",
+   "seccion": 3,
+   "texto": "Un perfil falso de Instagram hecho con Inteligencia Artificial es un ejemplo de amenaza.",
+   "tipo_respuesta": "vf",
+   "obligatorio": true,
+   "respuesta_correcta": "V",
+   "invertido": false,
+   "suma_al_indice": true,
+   "opciones": [
+    {
+     "codigo": "V",
+     "texto": "Verdadero",
+     "orden": 1
+    },
+    {
+     "codigo": "F",
+     "texto": "Falso",
+     "orden": 2
+    },
+    {
+     "codigo": "NS",
+     "texto": "No sé",
+     "orden": 3
+    }
+   ]
+  },
+  {
+   "codigo": "K2",
+   "seccion": 3,
+   "texto": "Una contraseña como \"12345678\" es segura porque tiene 8 caracteres.",
+   "tipo_respuesta": "vf",
+   "obligatorio": true,
+   "respuesta_correcta": "F",
+   "invertido": false,
+   "suma_al_indice": true,
+   "opciones": [
+    {
+     "codigo": "V",
+     "texto": "Verdadero",
+     "orden": 1
+    },
+    {
+     "codigo": "F",
+     "texto": "Falso",
+     "orden": 2
+    },
+    {
+     "codigo": "NS",
+     "texto": "No sé",
+     "orden": 3
+    }
+   ]
+  },
+  {
+   "codigo": "K3",
+   "seccion": 3,
+   "texto": "Los antivirus permiten tener un dispositivo protegido frente a todo tipo de ciberataques.",
+   "tipo_respuesta": "vf",
+   "obligatorio": true,
+   "respuesta_correcta": "F",
+   "invertido": false,
+   "suma_al_indice": true,
+   "opciones": [
+    {
+     "codigo": "V",
+     "texto": "Verdadero",
+     "orden": 1
+    },
+    {
+     "codigo": "F",
+     "texto": "Falso",
+     "orden": 2
+    },
+    {
+     "codigo": "NS",
+     "texto": "No sé",
+     "orden": 3
+    }
+   ]
+  },
+  {
+   "codigo": "K4",
+   "seccion": 3,
+   "texto": "Conectarse a redes Wi-Fi públicas puede llegar a exponer mis datos personales.",
+   "tipo_respuesta": "vf",
+   "obligatorio": true,
+   "respuesta_correcta": "V",
+   "invertido": false,
+   "suma_al_indice": true,
+   "opciones": [
+    {
+     "codigo": "V",
+     "texto": "Verdadero",
+     "orden": 1
+    },
+    {
+     "codigo": "F",
+     "texto": "Falso",
+     "orden": 2
+    },
+    {
+     "codigo": "NS",
+     "texto": "No sé",
+     "orden": 3
+    }
+   ]
+  },
+  {
+   "codigo": "K5",
+   "seccion": 3,
+   "texto": "No es necesario mantener actualizadas siempre mis aplicaciones.",
+   "tipo_respuesta": "vf",
+   "obligatorio": true,
+   "respuesta_correcta": "F",
+   "invertido": false,
+   "suma_al_indice": true,
+   "opciones": [
+    {
+     "codigo": "V",
+     "texto": "Verdadero",
+     "orden": 1
+    },
+    {
+     "codigo": "F",
+     "texto": "Falso",
+     "orden": 2
+    },
+    {
+     "codigo": "NS",
+     "texto": "No sé",
+     "orden": 3
+    }
+   ]
+  },
+  {
+   "codigo": "K6",
+   "seccion": 3,
+   "texto": "Una copia de seguridad permite que pueda volver a recuperar mis datos o archivos.",
+   "tipo_respuesta": "vf",
+   "obligatorio": true,
+   "respuesta_correcta": "V",
+   "invertido": false,
+   "suma_al_indice": true,
+   "opciones": [
+    {
+     "codigo": "V",
+     "texto": "Verdadero",
+     "orden": 1
+    },
+    {
+     "codigo": "F",
+     "texto": "Falso",
+     "orden": 2
+    },
+    {
+     "codigo": "NS",
+     "texto": "No sé",
+     "orden": 3
+    }
+   ]
+  },
+  {
+   "codigo": "K7",
+   "seccion": 3,
+   "texto": "La autenticación de doble factor (2FA) agrega una capa extra de seguridad a mis inicios de sesión en redes sociales.",
+   "tipo_respuesta": "vf",
+   "obligatorio": true,
+   "respuesta_correcta": "V",
+   "invertido": false,
+   "suma_al_indice": true,
+   "opciones": [
+    {
+     "codigo": "V",
+     "texto": "Verdadero",
+     "orden": 1
+    },
+    {
+     "codigo": "F",
+     "texto": "Falso",
+     "orden": 2
+    },
+    {
+     "codigo": "NS",
+     "texto": "No sé",
+     "orden": 3
+    }
+   ]
+  },
+  {
+   "codigo": "K8",
+   "seccion": 3,
+   "texto": "Puedo utilizar siempre la misma contraseña siempre y cuando la misma tenga mayúsculas, minúsculas, números y símbolos.",
+   "tipo_respuesta": "vf",
+   "obligatorio": true,
+   "respuesta_correcta": "F",
+   "invertido": false,
+   "suma_al_indice": true,
+   "opciones": [
+    {
+     "codigo": "V",
+     "texto": "Verdadero",
+     "orden": 1
+    },
+    {
+     "codigo": "F",
+     "texto": "Falso",
+     "orden": 2
+    },
+    {
+     "codigo": "NS",
+     "texto": "No sé",
+     "orden": 3
+    }
+   ]
+  },
+  {
+   "codigo": "K9",
+   "seccion": 3,
+   "texto": "El “phishing” busca engañarme para que entregue datos o haga clic en un enlace malicioso.",
+   "tipo_respuesta": "vf",
+   "obligatorio": true,
+   "respuesta_correcta": "V",
+   "invertido": false,
+   "suma_al_indice": true,
+   "opciones": [
+    {
+     "codigo": "V",
+     "texto": "Verdadero",
+     "orden": 1
+    },
+    {
+     "codigo": "F",
+     "texto": "Falso",
+     "orden": 2
+    },
+    {
+     "codigo": "NS",
+     "texto": "No sé",
+     "orden": 3
+    }
+   ]
+  },
+  {
+   "codigo": "K10",
+   "seccion": 3,
+   "texto": "Un código QR puede llevarme a un sitio falso que imita a uno real.",
+   "tipo_respuesta": "vf",
+   "obligatorio": true,
+   "respuesta_correcta": "V",
+   "invertido": false,
+   "suma_al_indice": true,
+   "opciones": [
+    {
+     "codigo": "V",
+     "texto": "Verdadero",
+     "orden": 1
+    },
+    {
+     "codigo": "F",
+     "texto": "Falso",
+     "orden": 2
+    },
+    {
+     "codigo": "NS",
+     "texto": "No sé",
+     "orden": 3
+    }
+   ]
+  },
+  {
+   "codigo": "A1",
+   "seccion": 4,
+   "texto": "Me preocupa que mis datos personales sean robados online.",
+   "tipo_respuesta": "likert",
+   "obligatorio": true,
+   "respuesta_correcta": null,
+   "invertido": false,
+   "suma_al_indice": true,
+   "opciones": [
+    {
+     "codigo": "1",
+     "texto": "Totalmente en desacuerdo",
+     "orden": 1
+    },
+    {
+     "codigo": "2",
+     "texto": "En desacuerdo",
+     "orden": 2
+    },
+    {
+     "codigo": "3",
+     "texto": "Ni de acuerdo ni en desacuerdo",
+     "orden": 3
+    },
+    {
+     "codigo": "4",
+     "texto": "De acuerdo",
+     "orden": 4
+    },
+    {
+     "codigo": "5",
+     "texto": "Totalmente de acuerdo",
+     "orden": 5
+    }
+   ]
+  },
+  {
+   "codigo": "A2",
+   "seccion": 4,
+   "texto": "Es responsabilidad de cada uno protegerse en internet, no solo de las plataformas.",
+   "tipo_respuesta": "likert",
+   "obligatorio": true,
+   "respuesta_correcta": null,
+   "invertido": false,
+   "suma_al_indice": true,
+   "opciones": [
+    {
+     "codigo": "1",
+     "texto": "Totalmente en desacuerdo",
+     "orden": 1
+    },
+    {
+     "codigo": "2",
+     "texto": "En desacuerdo",
+     "orden": 2
+    },
+    {
+     "codigo": "3",
+     "texto": "Ni de acuerdo ni en desacuerdo",
+     "orden": 3
+    },
+    {
+     "codigo": "4",
+     "texto": "De acuerdo",
+     "orden": 4
+    },
+    {
+     "codigo": "5",
+     "texto": "Totalmente de acuerdo",
+     "orden": 5
+    }
+   ]
+  },
+  {
+   "codigo": "A3",
+   "seccion": 4,
+   "texto": "Verificar la dirección web antes de ingresar datos personales en un sitio web es importante.",
+   "tipo_respuesta": "likert",
+   "obligatorio": true,
+   "respuesta_correcta": null,
+   "invertido": false,
+   "suma_al_indice": true,
+   "opciones": [
+    {
+     "codigo": "1",
+     "texto": "Totalmente en desacuerdo",
+     "orden": 1
+    },
+    {
+     "codigo": "2",
+     "texto": "En desacuerdo",
+     "orden": 2
+    },
+    {
+     "codigo": "3",
+     "texto": "Ni de acuerdo ni en desacuerdo",
+     "orden": 3
+    },
+    {
+     "codigo": "4",
+     "texto": "De acuerdo",
+     "orden": 4
+    },
+    {
+     "codigo": "5",
+     "texto": "Totalmente de acuerdo",
+     "orden": 5
+    }
+   ]
+  },
+  {
+   "codigo": "A4",
+   "seccion": 4,
+   "texto": "Las capacitaciones en ciberseguridad para estudiantes deberían ser obligatorias.",
+   "tipo_respuesta": "likert",
+   "obligatorio": true,
+   "respuesta_correcta": null,
+   "invertido": false,
+   "suma_al_indice": true,
+   "opciones": [
+    {
+     "codigo": "1",
+     "texto": "Totalmente en desacuerdo",
+     "orden": 1
+    },
+    {
+     "codigo": "2",
+     "texto": "En desacuerdo",
+     "orden": 2
+    },
+    {
+     "codigo": "3",
+     "texto": "Ni de acuerdo ni en desacuerdo",
+     "orden": 3
+    },
+    {
+     "codigo": "4",
+     "texto": "De acuerdo",
+     "orden": 4
+    },
+    {
+     "codigo": "5",
+     "texto": "Totalmente de acuerdo",
+     "orden": 5
+    }
+   ]
+  },
+  {
+   "codigo": "A5",
+   "seccion": 4,
+   "texto": "Confío en que los códigos QR en lugares públicos (cafés, universidad, transporte) son seguros.",
+   "tipo_respuesta": "likert",
+   "obligatorio": true,
+   "respuesta_correcta": null,
+   "invertido": true,
+   "suma_al_indice": true,
+   "opciones": [
+    {
+     "codigo": "1",
+     "texto": "Totalmente en desacuerdo",
+     "orden": 1
+    },
+    {
+     "codigo": "2",
+     "texto": "En desacuerdo",
+     "orden": 2
+    },
+    {
+     "codigo": "3",
+     "texto": "Ni de acuerdo ni en desacuerdo",
+     "orden": 3
+    },
+    {
+     "codigo": "4",
+     "texto": "De acuerdo",
+     "orden": 4
+    },
+    {
+     "codigo": "5",
+     "texto": "Totalmente de acuerdo",
+     "orden": 5
+    }
+   ]
+  },
+  {
+   "codigo": "A6",
+   "seccion": 4,
+   "texto": "Anotar mis contraseñas es una práctica que vale la pena.",
+   "tipo_respuesta": "likert",
+   "obligatorio": true,
+   "respuesta_correcta": null,
+   "invertido": false,
+   "suma_al_indice": false,
+   "opciones": [
+    {
+     "codigo": "1",
+     "texto": "Totalmente en desacuerdo",
+     "orden": 1
+    },
+    {
+     "codigo": "2",
+     "texto": "En desacuerdo",
+     "orden": 2
+    },
+    {
+     "codigo": "3",
+     "texto": "Ni de acuerdo ni en desacuerdo",
+     "orden": 3
+    },
+    {
+     "codigo": "4",
+     "texto": "De acuerdo",
+     "orden": 4
+    },
+    {
+     "codigo": "5",
+     "texto": "Totalmente de acuerdo",
+     "orden": 5
+    }
+   ]
+  },
+  {
+   "codigo": "A7",
+   "seccion": 4,
+   "texto": "Compartir información personal en redes sociales genera un riesgo de mis datos.",
+   "tipo_respuesta": "likert",
+   "obligatorio": true,
+   "respuesta_correcta": null,
+   "invertido": false,
+   "suma_al_indice": true,
+   "opciones": [
+    {
+     "codigo": "1",
+     "texto": "Totalmente en desacuerdo",
+     "orden": 1
+    },
+    {
+     "codigo": "2",
+     "texto": "En desacuerdo",
+     "orden": 2
+    },
+    {
+     "codigo": "3",
+     "texto": "Ni de acuerdo ni en desacuerdo",
+     "orden": 3
+    },
+    {
+     "codigo": "4",
+     "texto": "De acuerdo",
+     "orden": 4
+    },
+    {
+     "codigo": "5",
+     "texto": "Totalmente de acuerdo",
+     "orden": 5
+    }
+   ]
+  },
+  {
+   "codigo": "A8",
+   "seccion": 4,
+   "texto": "La universidad debería ofrecer charlas sobre ciberseguridad.",
+   "tipo_respuesta": "likert",
+   "obligatorio": true,
+   "respuesta_correcta": null,
+   "invertido": false,
+   "suma_al_indice": true,
+   "opciones": [
+    {
+     "codigo": "1",
+     "texto": "Totalmente en desacuerdo",
+     "orden": 1
+    },
+    {
+     "codigo": "2",
+     "texto": "En desacuerdo",
+     "orden": 2
+    },
+    {
+     "codigo": "3",
+     "texto": "Ni de acuerdo ni en desacuerdo",
+     "orden": 3
+    },
+    {
+     "codigo": "4",
+     "texto": "De acuerdo",
+     "orden": 4
+    },
+    {
+     "codigo": "5",
+     "texto": "Totalmente de acuerdo",
+     "orden": 5
+    }
+   ]
+  },
+  {
+   "codigo": "A9",
+   "seccion": 4,
+   "texto": "Me interesa aprender sobre medidas de ciberseguridad.",
+   "tipo_respuesta": "likert",
+   "obligatorio": true,
+   "respuesta_correcta": null,
+   "invertido": false,
+   "suma_al_indice": true,
+   "opciones": [
+    {
+     "codigo": "1",
+     "texto": "Totalmente en desacuerdo",
+     "orden": 1
+    },
+    {
+     "codigo": "2",
+     "texto": "En desacuerdo",
+     "orden": 2
+    },
+    {
+     "codigo": "3",
+     "texto": "Ni de acuerdo ni en desacuerdo",
+     "orden": 3
+    },
+    {
+     "codigo": "4",
+     "texto": "De acuerdo",
+     "orden": 4
+    },
+    {
+     "codigo": "5",
+     "texto": "Totalmente de acuerdo",
+     "orden": 5
+    }
+   ]
+  },
+  {
+   "codigo": "B1",
+   "seccion": 5,
+   "texto": "Antes de escanear un QR, verifico la fuente o el contexto donde está colocado/situado.",
+   "tipo_respuesta": "frecuencia",
+   "obligatorio": true,
+   "respuesta_correcta": null,
+   "invertido": false,
+   "suma_al_indice": true,
+   "opciones": [
+    {
+     "codigo": "1",
+     "texto": "Nunca",
+     "orden": 1
+    },
+    {
+     "codigo": "2",
+     "texto": "Rara vez",
+     "orden": 2
+    },
+    {
+     "codigo": "3",
+     "texto": "A veces",
+     "orden": 3
+    },
+    {
+     "codigo": "4",
+     "texto": "Frecuentemente",
+     "orden": 4
+    },
+    {
+     "codigo": "5",
+     "texto": "Siempre",
+     "orden": 5
+    }
+   ]
+  },
+  {
+   "codigo": "B2",
+   "seccion": 5,
+   "texto": "Uso contraseñas diferentes para distintas cuentas.",
+   "tipo_respuesta": "frecuencia",
+   "obligatorio": true,
+   "respuesta_correcta": null,
+   "invertido": false,
+   "suma_al_indice": true,
+   "opciones": [
+    {
+     "codigo": "1",
+     "texto": "Nunca",
+     "orden": 1
+    },
+    {
+     "codigo": "2",
+     "texto": "Rara vez",
+     "orden": 2
+    },
+    {
+     "codigo": "3",
+     "texto": "A veces",
+     "orden": 3
+    },
+    {
+     "codigo": "4",
+     "texto": "Frecuentemente",
+     "orden": 4
+    },
+    {
+     "codigo": "5",
+     "texto": "Siempre",
+     "orden": 5
+    }
+   ]
+  },
+  {
+   "codigo": "B3",
+   "seccion": 5,
+   "texto": "Activo la autenticación de doble factor (2FA) cuando está disponible.",
+   "tipo_respuesta": "frecuencia",
+   "obligatorio": true,
+   "respuesta_correcta": null,
+   "invertido": false,
+   "suma_al_indice": true,
+   "opciones": [
+    {
+     "codigo": "1",
+     "texto": "Nunca",
+     "orden": 1
+    },
+    {
+     "codigo": "2",
+     "texto": "Rara vez",
+     "orden": 2
+    },
+    {
+     "codigo": "3",
+     "texto": "A veces",
+     "orden": 3
+    },
+    {
+     "codigo": "4",
+     "texto": "Frecuentemente",
+     "orden": 4
+    },
+    {
+     "codigo": "5",
+     "texto": "Siempre",
+     "orden": 5
+    }
+   ]
+  },
+  {
+   "codigo": "B4",
+   "seccion": 5,
+   "texto": "Cambio mis contraseñas antes de que una aplicación me lo pida.",
+   "tipo_respuesta": "frecuencia",
+   "obligatorio": true,
+   "respuesta_correcta": null,
+   "invertido": false,
+   "suma_al_indice": false,
+   "opciones": [
+    {
+     "codigo": "1",
+     "texto": "Nunca",
+     "orden": 1
+    },
+    {
+     "codigo": "2",
+     "texto": "Rara vez",
+     "orden": 2
+    },
+    {
+     "codigo": "3",
+     "texto": "A veces",
+     "orden": 3
+    },
+    {
+     "codigo": "4",
+     "texto": "Frecuentemente",
+     "orden": 4
+    },
+    {
+     "codigo": "5",
+     "texto": "Siempre",
+     "orden": 5
+    }
+   ]
+  },
+  {
+   "codigo": "B5",
+   "seccion": 5,
+   "texto": "Hago clic en links recibidos por WhatsApp/SMS sin verificar quien me lo envió.",
+   "tipo_respuesta": "frecuencia",
+   "obligatorio": true,
+   "respuesta_correcta": null,
+   "invertido": true,
+   "suma_al_indice": true,
+   "opciones": [
+    {
+     "codigo": "1",
+     "texto": "Nunca",
+     "orden": 1
+    },
+    {
+     "codigo": "2",
+     "texto": "Rara vez",
+     "orden": 2
+    },
+    {
+     "codigo": "3",
+     "texto": "A veces",
+     "orden": 3
+    },
+    {
+     "codigo": "4",
+     "texto": "Frecuentemente",
+     "orden": 4
+    },
+    {
+     "codigo": "5",
+     "texto": "Siempre",
+     "orden": 5
+    }
+   ]
+  },
+  {
+   "codigo": "B6",
+   "seccion": 5,
+   "texto": "Uso redes Wi-Fi públicas para acceder a cuentas bancarias.",
+   "tipo_respuesta": "frecuencia",
+   "obligatorio": true,
+   "respuesta_correcta": null,
+   "invertido": true,
+   "suma_al_indice": true,
+   "opciones": [
+    {
+     "codigo": "1",
+     "texto": "Nunca",
+     "orden": 1
+    },
+    {
+     "codigo": "2",
+     "texto": "Rara vez",
+     "orden": 2
+    },
+    {
+     "codigo": "3",
+     "texto": "A veces",
+     "orden": 3
+    },
+    {
+     "codigo": "4",
+     "texto": "Frecuentemente",
+     "orden": 4
+    },
+    {
+     "codigo": "5",
+     "texto": "Siempre",
+     "orden": 5
+    }
+   ]
+  },
+  {
+   "codigo": "B7",
+   "seccion": 5,
+   "texto": "Reviso los permisos que me piden las aplicaciones antes de instalarlas.",
+   "tipo_respuesta": "frecuencia",
+   "obligatorio": true,
+   "respuesta_correcta": null,
+   "invertido": false,
+   "suma_al_indice": true,
+   "opciones": [
+    {
+     "codigo": "1",
+     "texto": "Nunca",
+     "orden": 1
+    },
+    {
+     "codigo": "2",
+     "texto": "Rara vez",
+     "orden": 2
+    },
+    {
+     "codigo": "3",
+     "texto": "A veces",
+     "orden": 3
+    },
+    {
+     "codigo": "4",
+     "texto": "Frecuentemente",
+     "orden": 4
+    },
+    {
+     "codigo": "5",
+     "texto": "Siempre",
+     "orden": 5
+    }
+   ]
+  },
+  {
+   "codigo": "B8",
+   "seccion": 5,
+   "texto": "Mantengo el sistema operativo y aplicaciones de mi celular actualizados.",
+   "tipo_respuesta": "frecuencia",
+   "obligatorio": true,
+   "respuesta_correcta": null,
+   "invertido": false,
+   "suma_al_indice": true,
+   "opciones": [
+    {
+     "codigo": "1",
+     "texto": "Nunca",
+     "orden": 1
+    },
+    {
+     "codigo": "2",
+     "texto": "Rara vez",
+     "orden": 2
+    },
+    {
+     "codigo": "3",
+     "texto": "A veces",
+     "orden": 3
+    },
+    {
+     "codigo": "4",
+     "texto": "Frecuentemente",
+     "orden": 4
+    },
+    {
+     "codigo": "5",
+     "texto": "Siempre",
+     "orden": 5
+    }
+   ]
+  },
+  {
+   "codigo": "B9",
+   "seccion": 5,
+   "texto": "Cuando recibo un email sospechoso, lo reporto o lo elimino sin abrirlo.",
+   "tipo_respuesta": "frecuencia",
+   "obligatorio": true,
+   "respuesta_correcta": null,
+   "invertido": false,
+   "suma_al_indice": true,
+   "opciones": [
+    {
+     "codigo": "1",
+     "texto": "Nunca",
+     "orden": 1
+    },
+    {
+     "codigo": "2",
+     "texto": "Rara vez",
+     "orden": 2
+    },
+    {
+     "codigo": "3",
+     "texto": "A veces",
+     "orden": 3
+    },
+    {
+     "codigo": "4",
+     "texto": "Frecuentemente",
+     "orden": 4
+    },
+    {
+     "codigo": "5",
+     "texto": "Siempre",
+     "orden": 5
+    }
+   ]
+  },
+  {
+   "codigo": "B10",
+   "seccion": 5,
+   "texto": "Leo los términos y condiciones de las páginas o aplicaciones.",
+   "tipo_respuesta": "frecuencia",
+   "obligatorio": true,
+   "respuesta_correcta": null,
+   "invertido": false,
+   "suma_al_indice": true,
+   "opciones": [
+    {
+     "codigo": "1",
+     "texto": "Nunca",
+     "orden": 1
+    },
+    {
+     "codigo": "2",
+     "texto": "Rara vez",
+     "orden": 2
+    },
+    {
+     "codigo": "3",
+     "texto": "A veces",
+     "orden": 3
+    },
+    {
+     "codigo": "4",
+     "texto": "Frecuentemente",
+     "orden": 4
+    },
+    {
+     "codigo": "5",
+     "texto": "Siempre",
+     "orden": 5
+    }
+   ]
+  },
+  {
+   "codigo": "E1",
+   "seccion": 6,
+   "texto": "En los últimos 12 meses, ¿recibiste alguno de estos intentos?",
+   "tipo_respuesta": "multiple",
+   "obligatorio": true,
+   "respuesta_correcta": null,
+   "invertido": false,
+   "suma_al_indice": false,
+   "opciones": [
+    {
+     "codigo": "1",
+     "texto": "Mail falso",
+     "orden": 1
+    },
+    {
+     "codigo": "2",
+     "texto": "SMS o WhatsApp falso",
+     "orden": 2
+    },
+    {
+     "codigo": "3",
+     "texto": "Llamada",
+     "orden": 3
+    },
+    {
+     "codigo": "4",
+     "texto": "Perfil falso",
+     "orden": 4
+    },
+    {
+     "codigo": "5",
+     "texto": "QR sospechoso",
+     "orden": 5
+    },
+    {
+     "codigo": "6",
+     "texto": "Malware",
+     "orden": 6
+    },
+    {
+     "codigo": "7",
+     "texto": "Robo de cuenta",
+     "orden": 7
+    },
+    {
+     "codigo": "8",
+     "texto": "Ninguno",
+     "orden": 8
+    }
+   ],
+   "nota": "'Ninguno' excluye las demás opciones"
+  },
+  {
+   "codigo": "E2",
+   "seccion": 6,
+   "texto": "¿Alguno tuvo consecuencias?",
+   "tipo_respuesta": "unica",
+   "obligatorio": true,
+   "respuesta_correcta": null,
+   "invertido": false,
+   "suma_al_indice": false,
+   "opciones": [
+    {
+     "codigo": "1",
+     "texto": "Sí",
+     "orden": 1
+    },
+    {
+     "codigo": "2",
+     "texto": "No",
+     "orden": 2
+    },
+    {
+     "codigo": "3",
+     "texto": "No sé",
+     "orden": 3
+    }
+   ]
+  },
+  {
+   "codigo": "P1",
+   "seccion": 7,
+   "texto": "¿Qué te gustaría aprender sobre ciberseguridad? (No incluyas nombres ni datos personales)",
+   "tipo_respuesta": "abierta",
+   "obligatorio": false,
+   "respuesta_correcta": null,
+   "invertido": false,
+   "suma_al_indice": false,
+   "opciones": []
+  }
+ ]
+}

@@ -9,7 +9,7 @@ services:
     branch: main
     autoDeploy: true
     buildCommand: pip install -r requirements.txt
-    preDeployCommand: flask --app wsgi db upgrade
+    preDeployCommand: flask --app wsgi db upgrade && flask --app wsgi preparar-base
     startCommand: gunicorn wsgi:app --workers 2 --timeout 30
     healthCheckPath: /salud
     envVars:
