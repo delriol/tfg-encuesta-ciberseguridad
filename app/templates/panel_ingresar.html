@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block titulo %}Panel – Encuesta TFG{% endblock %}
+{% block contenido %}
+<h1 class="h4 mb-3">Panel del investigador</h1>
+{% if error %}<div class="alert alert-danger">{{ error }}</div>{% endif %}
+<form method="post" class="card card-body" autocomplete="off">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <label class="form-label" for="usuario">Usuario</label>
+  <input class="form-control mb-3" name="usuario" id="usuario" required>
+  <label class="form-label" for="clave">Clave</label>
+  <input class="form-control mb-3" type="password" name="clave" id="clave" required>
+  <button class="btn btn-primary">Ingresar</button>
+</form>
+{% endblock %}

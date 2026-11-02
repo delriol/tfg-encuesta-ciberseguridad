@@ -30,6 +30,10 @@ def create_app(config_object="app.config.Config"):
 
     app.register_blueprint(encuesta_bp)
 
+    from .panel import bp as panel_bp
+
+    app.register_blueprint(panel_bp)
+
     @app.after_request
     def cabeceras_de_seguridad(resp):
         resp.headers.setdefault("Strict-Transport-Security", "max-age=31536000; includeSubDomains")
