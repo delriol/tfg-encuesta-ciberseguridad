@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf.csrf import CSRFProtect
@@ -26,6 +26,10 @@ def create_app(config_object="app.config.Config"):
 
     registrar_comandos(app)
 
+    from .encuesta import bp as encuesta_bp
+
+    app.register_blueprint(encuesta_bp)
+
     @app.after_request
     def cabeceras_de_seguridad(resp):
         resp.headers.setdefault("Strict-Transport-Security", "max-age=31536000; includeSubDomains")
@@ -34,14 +38,9 @@ def create_app(config_object="app.config.Config"):
         resp.headers.setdefault("Referrer-Policy", "same-origin")
         resp.headers.setdefault(
             "Content-Security-Policy",
-            "default-src 'self'; style-src 'self' https://cdn.jsdelivr.net; "
-            "script-src 'self' https://cdn.jsdelivr.net; img-src 'self' data:; frame-ancestors 'none'",
+            "default-src 'self'; img-src 'self' data:; frame-ancestors 'none'; form-action 'self'",
         )
         return resp
-
-    @app.get("/")
-    def inicio():
-        return render_template("en_construccion.html")
 
     @app.get("/salud")
     def salud():

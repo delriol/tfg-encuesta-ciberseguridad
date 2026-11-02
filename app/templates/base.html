@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block titulo %}Encuesta de ciberseguridad – UNPAZ{% endblock %}</title>
+  <link href="{{ url_for('static', filename='vendor/bootstrap.min.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='estilos.css') }}" rel="stylesheet">
+</head>
+<body class="bg-light">
+  {% if modo_prueba %}
+  <div class="bg-warning text-dark text-center small py-1">Modo prueba: lo que cargues acá se borra al publicar la encuesta.</div>
+  {% endif %}
+  <main class="container py-4 contenido">
+    {% block contenido %}{% endblock %}
+  </main>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

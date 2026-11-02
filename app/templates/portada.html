@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block contenido %}
+<h1 class="h3 mb-3">Encuesta sobre conciencia en ciberseguridad</h1>
+<p>Hola. Soy Leandro Del Rio, estudiante de la Licenciatura en Gestión de Tecnologías de la Información de la UNPAZ. Esta encuesta es parte de mi Trabajo Final de Grado, que evalúa cuánto sabemos los estudiantes sobre ciberseguridad y cómo nos cuidamos en internet.</p>
+<ul>
+  <li>Lleva entre 8 y 10 minutos.</li>
+  <li>Es anónima: no pedimos tu nombre, mail, DNI ni número de teléfono, y no guardamos tu dirección IP.</li>
+  <li>Es voluntaria: podés dejarla en cualquier momento, y si no la enviás no se guarda ninguna respuesta.</li>
+  <li>Las respuestas se usan solo con fines académicos y se publican únicamente como resultados agrupados.</li>
+  <li>Las respuestas anónimas se conservan hasta [12 meses después de la defensa del TFG] y después se eliminan. El anexo del TFG incluye la base sin ningún dato que permita identificarte.</li>
+  <li>Está dirigida a estudiantes de la UNPAZ de 18 años o más.</li>
+  <li>Se rige por la Ley 25.326 de Protección de Datos Personales.</li>
+  <li>Consultas: [mail de contacto]. Tutor: Sergio Torres.</li>
+</ul>
+{% if error %}<div class="alert alert-danger">{{ error }}</div>{% endif %}
+<form method="post" action="{{ url_for('encuesta.consentimiento') }}" class="card card-body">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <div class="form-check mb-2">
+    <input class="form-check-input" type="checkbox" name="mayor_18" value="si" id="mayor_18">
+    <label class="form-check-label" for="mayor_18">Tengo 18 años o más.</label>
+  </div>
+  <div class="form-check mb-3">
+    <input class="form-check-input" type="checkbox" name="acepta" value="si" id="acepta">
+    <label class="form-check-label" for="acepta">Leí la información y acepto participar.</label>
+  </div>
+  <div class="d-grid gap-2 d-sm-flex">
+    <button class="btn btn-primary" name="accion" value="comenzar">Comenzar la encuesta</button>
+    <button class="btn btn-outline-secondary" name="accion" value="no_participar">No quiero participar</button>
+  </div>
+</form>
+{% endblock %}

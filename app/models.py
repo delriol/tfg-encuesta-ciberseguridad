@@ -92,6 +92,7 @@ class Rechazo(db.Model):
     motivo = db.Column(db.String(15), nullable=False)
     origen_id = db.Column(db.Integer, db.ForeignKey("origen.id"), nullable=False)
     fecha_hora = db.Column(db.DateTime(timezone=True), nullable=False, default=ahora_utc)
+    origen = db.relationship("Origen")
 
     __table_args__ = (db.CheckConstraint("motivo IN ('no_acepta','menor')", name="ck_rechazo_motivo"),)
 
