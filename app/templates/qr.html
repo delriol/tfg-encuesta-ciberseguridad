@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block titulo %}Escaneaste un código QR que no conocías{% endblock %}
+{% block contenido %}
+<h1 class="h3 mb-3">Escaneaste un código QR que no conocías</h1>
+<p>El repositorio de apuntes y exámenes del cartel no existe. Este código es parte de un experimento académico de mi Trabajo Final de Grado en la UNPAZ, sobre cómo reaccionamos los estudiantes ante códigos QR desconocidos.</p>
+
+<h2 class="h5 mt-4">Qué pasó y qué no pasó</h2>
+<ul>
+  <li>Esta página es segura y no instaló nada en tu celular.</li>
+  <li>No guardamos tu nombre, tu número, tu ubicación ni tu dirección IP. Solo contamos que alguien entró, con la fecha y la hora.</li>
+  <li>Si la página hubiera sido maliciosa, podría haberte pedido tus contraseñas, datos de tu tarjeta o que descargues una aplicación.</li>
+</ul>
+
+<h2 class="h5 mt-4">Cómo cuidarte la próxima vez</h2>
+<ol>
+  <li>Antes de escanear, mirá quién puso el código y si el cartel parece oficial.</li>
+  <li>Después de escanear, revisá la dirección que muestra tu celular antes de abrirla.</li>
+  <li>Desconfiá de ofertas demasiado buenas, como exámenes resueltos, premios o descuentos.</li>
+  <li>Nunca ingreses contraseñas ni datos de pago en una página a la que llegaste por un QR.</li>
+  <li>Si un QR está pegado encima de otro, no lo escanees.</li>
+</ol>
+
+{% if abierta %}
+<div class="card card-body mt-4">
+  <p class="mb-3"><strong>¿Me ayudás con mi TFG?</strong> Respondé una encuesta anónima de 8 a 10 minutos sobre ciberseguridad.</p>
+  <a class="btn btn-primary btn-lg" href="{{ url_for('encuesta.portada', origen='qr') }}">Responder la encuesta</a>
+</div>
+{% endif %}
+
+<p class="small text-secondary mt-4">Responsable: Leandro Del Rio, estudiante de la Lic. en Gestión de Tecnologías de la Información, UNPAZ. Tutor: Sergio Torres. Consultas: [mail de contacto].</p>
+{% endblock %}

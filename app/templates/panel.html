@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block titulo %}Panel – Encuesta TFG{% endblock %}
+{% block contenido %}
+<div class="d-flex align-items-center mb-3">
+  <h1 class="h4 mb-0">Panel del investigador</h1>
+  <form method="post" action="{{ url_for('panel.salir') }}" class="ms-auto">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <button class="btn btn-sm btn-outline-secondary">Salir</button>
+  </form>
+</div>
+{% for m in get_flashed_messages() %}<div class="alert alert-info">{{ m }}</div>{% endfor %}
+
+<div class="card card-body mb-3">
+  {% if estado == "prueba" %}
+    <p class="mb-1"><span class="badge text-bg-warning">Modo prueba</span> La encuesta funciona, pero no está publicada. Los datos de abajo son de prueba.</p>
+  {% elif estado == "abierta" %}
+    <p class="mb-1"><span class="badge text-bg-success">Abierta</span> Publicada el {{ publicada }} · día {{ ind.dias_publicada }}</p>
+  {% else %}
+    <p class="mb-1"><span class="badge text-bg-secondary">Cerrada</span>{% if publicada %} Publicada el {{ publicada }} · {{ ind.dias_publicada }} días{% endif %}</p>
+  {% endif %}
+  <p class="small text-secondary mb-0">Cierre automático: {{ cierre }} (hora argentina)</p>
+</div>
+
+<div class="row g-2 mb-3">
+  <div class="col-6 col-md-3"><div class="card card-body"><div class="small text-secondary">Respuestas enviadas</div><div class="fs-3 fw-semibold">{{ ind.enviadas }}</div></div></div>
+  <div class="col-6 col-md-3"><div class="card card-body"><div class="small text-secondary">Empezadas sin enviar</div><div class="fs-3 fw-semibold">{{ ind.sin_enviar }}</div></div></div>
+  <div class="col-6 col-md-3"><div class="card card-body"><div class="small text-secondary">Visitas al QR</div><div class="fs-3 fw-semibold">{{ ind.visitas_qr }}</div><div class="small">{{ ind.visitantes_qr }} visitantes únicos</div></div></div>
+  <div class="col-6 col-md-3"><div class="card card-body"><div class="small text-secondary">QR → encuesta</div><div class="fs-3 fw-semibold">{{ ind.conversion_qr if ind.conversion_qr is not none else "–" }}{% if ind.conversion_qr is not none %}%{% endif %}</div><div class="small">{{ ind.enviadas_desde_qr }} enviadas desde el QR</div></div></div>
+</div>
+
+<table class="table table-sm bg-white">
+  <tbody>
+    <tr><th>Enviadas por origen</th><td>QR {{ ind.por_origen.get('qr', 0) }} · WhatsApp {{ ind.por_origen.get('whatsapp', 0) }} · Facebook {{ ind.por_origen.get('facebook', 0) }} · Directo {{ ind.por_origen.get('directo', 0) }}</td></tr>
+    <tr><th>No aceptaron</th><td>{{ ind.rechazo_no_acepta }}</td></tr>
+    <tr><th>Menores de 18</th><td>{{ ind.rechazo_menor }}</td></tr>
+    <tr><th>Tiempo de respuesta (mediana)</th><td>{{ ind.mediana_minutos if ind.mediana_minutos is not none else "–" }} min</td></tr>
+  </tbody>
+</table>
+
+{% if ind.por_dia %}
+<h2 class="h6">Por día</h2>
+<table class="table table-sm bg-white">
+  <thead><tr><th>Día</th><th>Respuestas</th><th>Visitas QR</th></tr></thead>
+  <tbody>{% for dia, c in ind.por_dia %}<tr><td>{{ dia.strftime("%d/%m") }}</td><td>{{ c[0] }}</td><td>{{ c[1] }}</td></tr>{% endfor %}</tbody>
+</table>
+{% endif %}
+
+<h2 class="h6">Descargas</h2>
+<div class="d-flex flex-wrap gap-2 mb-4">
+  <a class="btn btn-outline-primary" href="{{ url_for('panel.exportar_respuestas') }}">Respuestas en crudo (CSV)</a>
+  <a class="btn btn-outline-primary" href="{{ url_for('panel.exportar_puntajes') }}">Puntajes e índices (CSV)</a>
+  <a class="btn btn-outline-primary" href="{{ url_for('panel.exportar_visitas') }}">Visitas al QR (CSV)</a>
+  <a class="btn btn-outline-secondary" href="{{ url_for('panel.difusion') }}">Enlaces, código QR y cartel</a>
+</div>
+
+{% if estado == "prueba" %}
+<form method="post" action="{{ url_for('panel.publicar') }}" class="card card-body border-danger">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <p class="mb-2"><strong>Publicar la encuesta.</strong> Borra todos los datos de prueba, registra la fecha de hoy como fecha de publicación y abre la encuesta. No se puede deshacer.</p>
+  <label class="form-label small" for="confirmacion">Escribí PUBLICAR para confirmar</label>
+  <input class="form-control mb-2" name="confirmacion" id="confirmacion" autocomplete="off">
+  <button class="btn btn-danger">Publicar</button>
+</form>
+{% elif cfg.fecha_publicacion %}
+<form method="post" action="{{ url_for('panel.cambiar_estado') }}">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  {% if cfg.encuesta_abierta %}
+  <button class="btn btn-outline-danger" name="abrir" value="no">Pausar la encuesta</button>
+  {% else %}
+  <button class="btn btn-outline-success" name="abrir" value="si">Reanudar la encuesta</button>
+  {% endif %}
+</form>
+{% endif %}
+{% endblock %}

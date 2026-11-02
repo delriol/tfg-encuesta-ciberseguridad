@@ -1,8 +1,9 @@
-from flask import Flask, render_template
+from flask import Flask
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf.csrf import CSRFProtect
 from sqlalchemy import text
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -17,9 +18,29 @@ def create_app(config_object="app.config.Config"):
     if not app.config.get("SQLALCHEMY_DATABASE_URI"):
         raise RuntimeError("Falta la variable de entorno DATABASE_URL")
 
+    # Render atiende detrás de un proxy: así la app sabe que la conexión original es HTTPS.
+    app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1)
+
     db.init_app(app)
     migrate.init_app(app, db)
     csrf.init_app(app)
+
+    from . import models  # noqa: F401  (registra las tablas)
+    from .cli import registrar_comandos
+
+    registrar_comandos(app)
+
+    from .encuesta import bp as encuesta_bp
+
+    app.register_blueprint(encuesta_bp)
+
+    from .panel import bp as panel_bp
+
+    app.register_blueprint(panel_bp)
+
+    from .qr import bp as qr_bp
+
+    app.register_blueprint(qr_bp)
 
     @app.after_request
     def cabeceras_de_seguridad(resp):
@@ -29,14 +50,9 @@ def create_app(config_object="app.config.Config"):
         resp.headers.setdefault("Referrer-Policy", "same-origin")
         resp.headers.setdefault(
             "Content-Security-Policy",
-            "default-src 'self'; style-src 'self' https://cdn.jsdelivr.net; "
-            "script-src 'self' https://cdn.jsdelivr.net; img-src 'self' data:; frame-ancestors 'none'",
+            "default-src 'self'; img-src 'self' data:; frame-ancestors 'none'; form-action 'self'",
         )
         return resp
-
-    @app.get("/")
-    def inicio():
-        return render_template("en_construccion.html")
 
     @app.get("/salud")
     def salud():

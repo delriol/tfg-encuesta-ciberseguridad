@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block titulo %}Difusión – Encuesta TFG{% endblock %}
+{% block contenido %}
+<p><a href="{{ url_for('panel.inicio') }}">← Volver al panel</a></p>
+<h1 class="h4 mb-3">Enlaces y código QR</h1>
+<p>Usá siempre el enlace de cada canal: así el panel sabe de dónde vino cada respuesta.</p>
+<table class="table bg-white">
+  <tbody>
+  {% for canal, url in enlaces.items() %}
+    <tr><th class="text-nowrap">{{ canal }}</th><td class="text-break"><code>{{ url }}</code></td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+<div class="d-flex flex-wrap gap-2">
+  <a class="btn btn-primary" href="{{ url_for('panel.cartel') }}">Ver cartel para imprimir</a>
+  <a class="btn btn-outline-primary" href="{{ url_for('panel.codigo_qr_png') }}">Código QR en PNG</a>
+  <a class="btn btn-outline-primary" href="{{ url_for('panel.codigo_qr_svg') }}">Código QR en SVG</a>
+</div>
+{% endblock %}
