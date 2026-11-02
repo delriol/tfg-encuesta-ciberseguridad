@@ -3,6 +3,7 @@ from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf.csrf import CSRFProtect
 from sqlalchemy import text
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -16,6 +17,9 @@ def create_app(config_object="app.config.Config"):
         raise RuntimeError("Falta la variable de entorno SECRET_KEY")
     if not app.config.get("SQLALCHEMY_DATABASE_URI"):
         raise RuntimeError("Falta la variable de entorno DATABASE_URL")
+
+    # Render atiende detrás de un proxy: así la app sabe que la conexión original es HTTPS.
+    app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1)
 
     db.init_app(app)
     migrate.init_app(app, db)
@@ -33,6 +37,10 @@ def create_app(config_object="app.config.Config"):
     from .panel import bp as panel_bp
 
     app.register_blueprint(panel_bp)
+
+    from .qr import bp as qr_bp
+
+    app.register_blueprint(qr_bp)
 
     @app.after_request
     def cabeceras_de_seguridad(resp):

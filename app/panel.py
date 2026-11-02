@@ -2,8 +2,13 @@
 from datetime import datetime, timedelta, timezone
 from functools import wraps
 
+import io
+import os
+
+import segno
 from flask import (Blueprint, Response, abort, flash, redirect, render_template, request, session,
                    url_for)
+from markupsafe import Markup
 from sqlalchemy import func
 from werkzeug.security import check_password_hash
 
@@ -173,3 +178,50 @@ def cambiar_estado():
     db.session.commit()
     flash("Encuesta reanudada." if cfg.encuesta_abierta else "Encuesta pausada.")
     return redirect(url_for("panel.inicio"))
+
+
+def url_publica(endpoint, **valores):
+    """Dirección completa que se difunde. PUBLIC_URL permite fijarla si se usa un dominio propio."""
+    base = os.environ.get("PUBLIC_URL", "").rstrip("/")
+    ruta = url_for(endpoint, **valores)
+    return base + ruta if base else url_for(endpoint, _external=True, _scheme="https", **valores)
+
+
+def _codigo_qr():
+    return segno.make(url_publica("qr.pagina_qr"), error="h")
+
+
+@bp.get("/difusion")
+@requiere_admin
+def difusion():
+    enlaces = {
+        "Cartel (código QR)": url_publica("qr.pagina_qr"),
+        "WhatsApp": url_publica("encuesta.portada", origen="whatsapp"),
+        "Facebook": url_publica("encuesta.portada", origen="facebook"),
+    }
+    return render_template("panel_difusion.html", enlaces=enlaces, modo_prueba=False)
+
+
+@bp.get("/codigo-qr.png")
+@requiere_admin
+def codigo_qr_png():
+    buf = io.BytesIO()
+    _codigo_qr().save(buf, kind="png", scale=20, border=4)
+    return Response(buf.getvalue(), mimetype="image/png",
+                    headers={"Content-Disposition": "attachment; filename=codigo-qr-tfg.png"})
+
+
+@bp.get("/codigo-qr.svg")
+@requiere_admin
+def codigo_qr_svg():
+    buf = io.BytesIO()
+    _codigo_qr().save(buf, kind="svg", scale=10, border=4)
+    return Response(buf.getvalue(), mimetype="image/svg+xml",
+                    headers={"Content-Disposition": "attachment; filename=codigo-qr-tfg.svg"})
+
+
+@bp.get("/cartel")
+@requiere_admin
+def cartel():
+    svg = _codigo_qr().svg_inline(scale=12, border=2, omitsize=True)
+    return render_template("cartel.html", qr=Markup(svg))
