@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% macro marcado(item, op) -%}
+  {%- if valores and op.codigo in valores.getlist(item.codigo) %}checked{% endif -%}
+{%- endmacro %}
+{% block contenido %}
+<form method="post" action="{{ url_for('encuesta.cuestionario') }}" id="form-encuesta" novalidate>
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <div class="oculto" aria-hidden="true">
+    <label for="sitio_web">No completar</label>
+    <input type="text" name="sitio_web" id="sitio_web" tabindex="-1" autocomplete="off">
+  </div>
+  {% if errores %}
+  <div class="alert alert-danger" role="alert">Hay {{ errores|length }} pregunta{{ 's' if errores|length > 1 }} para revisar. Están marcadas en rojo.</div>
+  {% endif %}
+  <div class="progress mb-3" id="progreso" hidden role="progressbar" aria-label="Avance de la encuesta"
+       aria-valuemin="1" aria-valuemax="7" aria-valuenow="1">
+    <div class="progress-bar" id="barra-progreso"></div>
+  </div>
+  {% for seccion, items_seccion in items|groupby("seccion") %}
+  <section class="seccion mb-4" data-seccion="{{ seccion }}">
+    <h2 class="h5 text-secondary">Sección {{ seccion }} de 7: {{ secciones[seccion|string] }}</h2>
+    {% if seccion == 3 %}
+    <p class="small">Marcá Verdadero, Falso o No sé. No hay penalidad por responder No sé: es mejor que adivinar.</p>
+    {% endif %}
+    {% for item in items_seccion %}
+    <fieldset class="card card-body mb-3 pregunta {% if item.codigo in errores %}border-danger{% endif %}" id="p-{{ item.codigo }}"
+              data-obligatoria="{{ 'si' if item.obligatorio else 'no' }}" data-tipo="{{ item.tipo_respuesta }}">
+      <legend class="fs-6 fw-semibold">{{ item.texto }}{% if not item.obligatorio %} <span class="text-secondary fw-normal">(opcional)</span>{% endif %}</legend>
+      {% if item.tipo_respuesta == "abierta" %}
+        <p class="small text-secondary">No incluyas nombres, mails, teléfonos ni otros datos personales tuyos o de otras personas.</p>
+        <textarea class="form-control" name="{{ item.codigo }}" rows="4" maxlength="1000">{{ valores.get(item.codigo, '') if valores }}</textarea>
+      {% elif item.tipo_respuesta == "desplegable" %}
+        <select class="form-select" name="{{ item.codigo }}">
+          <option value="">Elegí una opción</option>
+          {% for grupo, ops in item.opciones|groupby("grupo") %}
+          <optgroup label="{{ grupo }}">
+            {% for op in ops|sort(attribute="orden") %}
+            <option value="{{ op.codigo }}" {% if valores and valores.get(item.codigo) == op.codigo %}selected{% endif %}>{{ op.texto }}</option>
+            {% endfor %}
+          </optgroup>
+          {% endfor %}
+        </select>
+      {% else %}
+        {% set tipo = "checkbox" if item.tipo_respuesta == "multiple" else "radio" %}
+        <div class="{% if item.tipo_respuesta in ('vf', 'likert', 'frecuencia') %}opciones-escala{% endif %}">
+        {% for op in item.opciones %}
+          <div class="form-check">
+            <input class="form-check-input" type="{{ tipo }}" name="{{ item.codigo }}" value="{{ op.codigo }}"
+                   id="{{ item.codigo }}-{{ op.codigo }}" {{ marcado(item, op) }} {% if op.excluyente %}data-excluyente="si"{% endif %}>
+            <label class="form-check-label" for="{{ item.codigo }}-{{ op.codigo }}">{{ op.texto }}</label>
+          </div>
+        {% endfor %}
+        </div>
+      {% endif %}
+      {% if item.codigo in errores %}<div class="text-danger small mt-2">{{ errores[item.codigo] }}</div>{% endif %}
+    </fieldset>
+    {% endfor %}
+  </section>
+  {% endfor %}
+  <div class="d-flex gap-2 mb-2" id="navegacion" hidden>
+    <button type="button" class="btn btn-outline-secondary" id="btn-anterior">Anterior</button>
+    <button type="button" class="btn btn-primary ms-auto" id="btn-siguiente">Siguiente</button>
+  </div>
+  <div class="d-grid"><button class="btn btn-primary btn-lg" type="submit" id="btn-enviar">Enviar respuestas</button></div>
+</form>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='encuesta.js') }}"></script>{% endblock %}

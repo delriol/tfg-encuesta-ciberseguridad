@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block contenido %}
+{% if publicada %}
+<p class="lead">La encuesta cerró el lunes 16 de noviembre de 2026. Gracias a todas las personas que participaron.</p>
+{% else %}
+<p class="lead">La encuesta todavía no está disponible.</p>
+{% endif %}
+{% endblock %}

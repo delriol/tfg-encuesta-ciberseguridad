@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block contenido %}
+{% if motivo == "menor" %}
+<p class="lead">Esta encuesta es solo para personas de 18 años o más. No se guardó ninguna respuesta. Gracias por tu interés.</p>
+{% else %}
+<p class="lead">Entendido, no se guardó ninguna respuesta. Gracias por tu tiempo.</p>
+{% endif %}
+{% endblock %}
