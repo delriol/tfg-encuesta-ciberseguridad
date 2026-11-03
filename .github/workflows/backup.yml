@@ -19,14 +19,19 @@ jobs:
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           BACKUP_PASSPHRASE: ${{ secrets.BACKUP_PASSPHRASE }}
+        # bash explícito = -eo pipefail: si pg_dump falla, el paso falla (antes quedaba en verde con un archivo vacío).
+        shell: bash
         run: |
           test -n "$DATABASE_URL" && test -n "$BACKUP_PASSPHRASE"
-          docker run --rm -e DATABASE_URL postgres:17 \
+          # La versión de pg_dump tiene que ser igual o mayor que la del servidor de Neon (18).
+          docker run --rm -e DATABASE_URL postgres:18 \
             sh -c 'pg_dump --no-owner --no-privileges "$DATABASE_URL"' \
             | gzip -9 \
             | gpg --batch --yes --pinentry-mode loopback --passphrase "$BACKUP_PASSPHRASE" \
                   --symmetric --cipher-algo AES256 -o backup.sql.gz.gpg
-          test -s backup.sql.gz.gpg
+          # Control: la copia descifrada tiene que terminar con la marca de volcado completo de pg_dump.
+          gpg --batch --quiet --pinentry-mode loopback --passphrase "$BACKUP_PASSPHRASE" -d backup.sql.gz.gpg \
+            | gunzip | tail -n 5 | grep -q "PostgreSQL database dump complete"
           ls -l backup.sql.gz.gpg
       - uses: actions/upload-artifact@v4
         with:
