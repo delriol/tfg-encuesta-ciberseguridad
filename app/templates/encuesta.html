@@ -20,7 +20,7 @@
   <section class="seccion mb-4" data-seccion="{{ seccion }}">
     <h2 class="h5 text-secondary">Sección {{ seccion }} de 7: {{ secciones[seccion|string] }}</h2>
     {% if seccion == 3 %}
-    <p class="small">Marcá Verdadero, Falso o No sé. No hay penalidad por responder No sé: es mejor que adivinar.</p>
+    <p class="small">Marcá Verdadero, Falso o No sé.</p>
     {% endif %}
     {% for item in items_seccion %}
     <fieldset class="card card-body mb-3 pregunta {% if item.codigo in errores %}border-danger{% endif %}" id="p-{{ item.codigo }}"
