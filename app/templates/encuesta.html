@@ -12,15 +12,20 @@
   {% if errores %}
   <div class="alert alert-danger" role="alert">Hay {{ errores|length }} pregunta{{ 's' if errores|length > 1 }} para revisar. Están marcadas en rojo.</div>
   {% endif %}
-  <div class="progress mb-3" id="progreso" hidden role="progressbar" aria-label="Avance de la encuesta"
-       aria-valuemin="1" aria-valuemax="7" aria-valuenow="1">
-    <div class="progress-bar" id="barra-progreso"></div>
+  <div class="barra-avance">
+    <div class="progress" id="progreso" hidden role="progressbar" aria-label="Avance de la encuesta"
+         aria-valuemin="1" aria-valuemax="7" aria-valuenow="1">
+      <div class="progress-bar" id="barra-progreso"></div>
+    </div>
   </div>
   {% for seccion, items_seccion in items|groupby("seccion") %}
   <section class="seccion mb-4" data-seccion="{{ seccion }}">
-    <h2 class="h5 text-secondary">Sección {{ seccion }} de 7: {{ secciones[seccion|string] }}</h2>
+    <div class="titulo-seccion">
+      <div class="numero-seccion" aria-hidden="true">{{ seccion }}</div>
+      <h2><small>Sección {{ seccion }} de 7</small>{{ secciones[seccion|string] }}</h2>
+    </div>
     {% if seccion == 3 %}
-    <p class="small">Marcá Verdadero, Falso o No sé.</p>
+    <p class="small instruccion">Marcá Verdadero, Falso o No sé.</p>
     {% endif %}
     {% for item in items_seccion %}
     <fieldset class="card card-body mb-3 pregunta {% if item.codigo in errores %}border-danger{% endif %}" id="p-{{ item.codigo }}"

@@ -1,8 +1,12 @@
 {% extends "base.html" %}
 {% block contenido %}
+<div class="tarjeta estado">
+  <div class="tarjeta-cuerpo">
 {% if motivo == "menor" %}
-<p class="lead">Esta encuesta es solo para personas de 18 años o más. No se guardó ninguna respuesta. Gracias por tu interés.</p>
+<p class="lead mb-0">Esta encuesta es solo para personas de 18 años o más. No se guardó ninguna respuesta. Gracias por tu interés.</p>
 {% else %}
-<p class="lead">Entendido, no se guardó ninguna respuesta. Gracias por tu tiempo.</p>
+<p class="lead mb-0">Entendido, no se guardó ninguna respuesta. Gracias por tu tiempo.</p>
 {% endif %}
+  </div>
+</div>
 {% endblock %}

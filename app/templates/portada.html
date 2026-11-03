@@ -1,29 +1,55 @@
 {% extends "base.html" %}
 {% block contenido %}
-<h1 class="h3 mb-3">Encuesta sobre conciencia en ciberseguridad</h1>
-<p>Hola. Soy Leandro Del Rio, estudiante de la Licenciatura en Gestión de Tecnologías de la Información de la UNPAZ. Esta encuesta es parte de mi Trabajo Final de Grado, que evalúa cuánto sabemos los estudiantes sobre ciberseguridad y cómo nos cuidamos en internet.</p>
-<ul>
-  <li>Lleva entre 8 y 10 minutos.</li>
-  <li>Es anónima: no hace falta que informes ningún dato personal.</li>
-  <li>Es voluntaria: podés dejarla en cualquier momento, y si no la enviás no se guarda ninguna respuesta.</li>
-  <li>Las respuestas se usan solo con fines académicos y se publican únicamente como resultados agrupados.</li>
-  <li>Se rige por la Ley 25.326 de Protección de Datos Personales.</li>
-  <li>Consultas: leandrodamiandelrio@gmail.com. Tutor: Sergio Torres.</li>
-</ul>
-{% if error %}<div class="alert alert-danger">{{ error }}</div>{% endif %}
-<form method="post" action="{{ url_for('encuesta.consentimiento') }}" class="card card-body">
-  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-  <div class="form-check mb-2">
-    <input class="form-check-input" type="checkbox" name="mayor_18" value="si" id="mayor_18">
-    <label class="form-check-label" for="mayor_18">Tengo 18 años o más.</label>
+<div class="tarjeta">
+  <div class="tarjeta-cuerpo">
+    <span class="etiqueta">Encuesta para estudiantes de la UNPAZ</span>
+    <h1 class="h3 titulo-principal mt-1 mb-3">Encuesta sobre conciencia en ciberseguridad</h1>
+    <p>Hola. Soy Leandro Del Rio, estudiante de la Licenciatura en Gestión de Tecnologías de la Información de la UNPAZ. Esta encuesta es parte de mi Trabajo Final de Grado, que evalúa cuánto sabemos los estudiantes sobre ciberseguridad y cómo nos cuidamos en internet.</p>
+
+    <div class="datos" aria-hidden="true">
+      <div class="dato">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8" fill="none" stroke="#12355b" stroke-width="2"/><path d="M12 9v4l2.5 2.5M9 2h6" fill="none" stroke="#12355b" stroke-width="2" stroke-linecap="round"/></svg>
+        <strong>8 a 10 min</strong><span>de duración</span>
+      </div>
+      <div class="dato">
+        <svg viewBox="0 0 24 24"><path d="M12 2 4 5.5v6c0 5 3.4 9.4 8 10.5 4.6-1.1 8-5.5 8-10.5v-6L12 2z" fill="none" stroke="#12355b" stroke-width="2" stroke-linejoin="round"/><path d="m8.5 12 2.5 2.5 4.5-5" fill="none" stroke="#0e8a78" stroke-width="2.2" stroke-linecap="round"/></svg>
+        <strong>Anónima</strong><span>sin datos personales</span>
+      </div>
+      <div class="dato">
+        <svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 8a4.3 4.3 0 0 1 7.5 2.8C19.5 16.4 12 21 12 21z" fill="none" stroke="#12355b" stroke-width="2" stroke-linejoin="round"/></svg>
+        <strong>Voluntaria</strong><span>la dejás cuando quieras</span>
+      </div>
+    </div>
+
+    <ul class="lista-info">
+      <li>Lleva entre 8 y 10 minutos.</li>
+      <li>Es anónima: no hace falta que informes ningún dato personal.</li>
+      <li>Es voluntaria: podés dejarla en cualquier momento, y si no la enviás no se guarda ninguna respuesta.</li>
+      <li>Las respuestas se usan solo con fines académicos y se publican únicamente como resultados agrupados.</li>
+      <li>Se rige por la Ley 25.326 de Protección de Datos Personales.</li>
+      <li>Consultas: leandrodamiandelrio@gmail.com. Tutor: Sergio Torres.</li>
+    </ul>
   </div>
-  <div class="form-check mb-3">
-    <input class="form-check-input" type="checkbox" name="acepta" value="si" id="acepta">
-    <label class="form-check-label" for="acepta">Leí la información y acepto participar.</label>
-  </div>
-  <div class="d-grid gap-2 d-sm-flex">
-    <button class="btn btn-primary" name="accion" value="comenzar">Comenzar la encuesta</button>
-    <button class="btn btn-outline-secondary" name="accion" value="no_participar">No quiero participar</button>
+</div>
+
+{% if error %}<div class="alert alert-danger mt-3">{{ error }}</div>{% endif %}
+<form method="post" action="{{ url_for('encuesta.consentimiento') }}" class="tarjeta mt-3">
+  <div class="tarjeta-cuerpo">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <div class="consentimiento mb-3">
+      <div class="form-check mb-2">
+        <input class="form-check-input" type="checkbox" name="mayor_18" value="si" id="mayor_18">
+        <label class="form-check-label" for="mayor_18">Tengo 18 años o más.</label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="acepta" value="si" id="acepta">
+        <label class="form-check-label" for="acepta">Leí la información y acepto participar.</label>
+      </div>
+    </div>
+    <div class="d-grid gap-2 d-sm-flex">
+      <button class="btn btn-primary btn-lg" name="accion" value="comenzar">Comenzar la encuesta</button>
+      <button class="btn btn-outline-secondary btn-lg" name="accion" value="no_participar">No quiero participar</button>
+    </div>
   </div>
 </form>
 {% endblock %}

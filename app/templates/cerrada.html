@@ -1,8 +1,12 @@
 {% extends "base.html" %}
 {% block contenido %}
+<div class="tarjeta estado">
+  <div class="tarjeta-cuerpo">
 {% if publicada %}
-<p class="lead">La encuesta cerró el lunes 16 de noviembre de 2026. Gracias a todas las personas que participaron.</p>
+<p class="lead mb-0">La encuesta cerró el lunes 16 de noviembre de 2026. Gracias a todas las personas que participaron.</p>
 {% else %}
-<p class="lead">La encuesta todavía no está disponible.</p>
+<p class="lead mb-0">La encuesta todavía no está disponible.</p>
 {% endif %}
+  </div>
+</div>
 {% endblock %}
