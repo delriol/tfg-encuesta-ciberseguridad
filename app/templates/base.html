@@ -3,17 +3,37 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#12355b">
   <title>{% block titulo %}Encuesta de ciberseguridad – UNPAZ{% endblock %}</title>
   <link href="{{ url_for('static', filename='vendor/bootstrap.min.css') }}" rel="stylesheet">
   <link href="{{ url_for('static', filename='estilos.css') }}" rel="stylesheet">
 </head>
-<body class="bg-light">
+<body class="{% block clase_body %}{% endblock %}">
   {% if modo_prueba %}
-  <div class="bg-warning text-dark text-center small py-1">Modo prueba: lo que cargues acá se borra al publicar la encuesta.</div>
+  <div class="aviso-prueba text-center small py-1">Modo prueba: lo que cargues acá se borra al publicar la encuesta.</div>
   {% endif %}
+  <header class="cabecera">
+    <div class="container contenido d-flex align-items-center gap-3 py-3">
+      <svg class="emblema" viewBox="0 0 48 48" aria-hidden="true" focusable="false">
+        <path d="M24 3 6 10v12c0 11.5 7.7 20.6 18 23 10.3-2.4 18-11.5 18-23V10L24 3z" fill="#ffffff" fill-opacity=".14" stroke="#ffffff" stroke-width="2"/>
+        <rect x="16" y="22" width="16" height="12" rx="2" fill="#ffffff"/>
+        <path d="M19 22v-4a5 5 0 0 1 10 0v4" fill="none" stroke="#ffffff" stroke-width="2.5"/>
+        <circle cx="24" cy="28" r="2" fill="#12355b"/>
+      </svg>
+      <div class="lh-sm">
+        <div class="cabecera-titulo">Conciencia en ciberseguridad</div>
+        <div class="cabecera-sub">Trabajo Final de Grado · UNPAZ</div>
+      </div>
+    </div>
+  </header>
   <main class="container py-4 contenido">
     {% block contenido %}{% endblock %}
   </main>
+  <footer class="pie">
+    <div class="container contenido py-3 small">
+      Leandro Del Rio · Lic. en Gestión de Tecnologías de la Información · Universidad Nacional de José Clemente Paz
+    </div>
+  </footer>
   {% block scripts %}{% endblock %}
 </body>
 </html>
