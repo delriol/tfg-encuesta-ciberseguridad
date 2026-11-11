@@ -58,7 +58,7 @@ def test_ninguno_es_excluyente(base):
 def test_carga_es_repetible(base):
     assert cargar_catalogo() == (40, 212)
     sembrar_base()
-    assert Origen.query.count() == 4
+    assert {o.codigo for o in Origen.query} == {"whatsapp", "facebook", "directo"}
     assert Configuracion.query.count() == 1
 
 

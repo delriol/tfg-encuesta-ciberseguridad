@@ -15,7 +15,7 @@ bp = Blueprint("encuesta", __name__)
 
 COOKIE = "tfg_participante"
 DURACION_COOKIE = 60 * 60 * 24 * 60  # 60 días: cubre toda la recolección
-ORIGENES_VALIDOS = {"qr", "whatsapp", "facebook"}
+ORIGENES_VALIDOS = {"whatsapp", "facebook"}
 HONEYPOT = "sitio_web"  # campo oculto: si viene completo, es un bot
 
 
@@ -90,7 +90,7 @@ def consentimiento():
                                **_contexto()), 400
 
     origen = _origen_actual()
-    r = Respuesta(origen=origen, desde_qr=origen.codigo == "qr", token_navegador=uuid.uuid4(),
+    r = Respuesta(origen=origen, token_navegador=uuid.uuid4(),
                   version_consentimiento=configuracion().version_consentimiento)
     db.session.add(r)
     db.session.commit()
