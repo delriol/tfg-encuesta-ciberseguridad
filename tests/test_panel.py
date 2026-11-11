@@ -87,6 +87,7 @@ def test_indicadores(base, client):
     html = client.get("/panel").get_data(as_text=True)
     assert ">2<" in html  # enviadas
     assert "WhatsApp 1 · Facebook 1 · Directo 0" in html
+    assert "QR" not in html
 
 
 def test_csv_respuestas(base, client):
@@ -95,7 +96,7 @@ def test_csv_respuestas(base, client):
     filas = leer_csv(client.get("/panel/exportar/respuestas.csv"))
     assert len(filas) == 1
     f = filas[0]
-    assert f["origen"] == "facebook"
+    assert f["origen"] == "facebook" and "desde_qr" not in f
     assert f["Q1_S1"] == "1" and f["Q1_G2"] == "1" and f["Q1_S2"] == "0"
     assert f["D5_1"] == "1" and f["D5_2"] == "0" and f["D5_3"] == "1"
     assert f["E1_8"] == "1" and f["E1_1"] == "0"
@@ -168,3 +169,25 @@ def test_pausar_y_reanudar(base, client):
     assert "cerró" in base.test_client().get("/").get_data(as_text=True)
     client.post("/panel/estado", data={"abrir": "si"})
     assert "Comenzar la encuesta" in base.test_client().get("/").get_data(as_text=True)
+
+
+# --- sin experimento QR ---------------------------------------------------
+
+@pytest.mark.parametrize("ruta", ["/qr", "/panel/cartel", "/panel/codigo-qr.png", "/panel/codigo-qr.svg",
+                                  "/panel/exportar/visitas.csv"])
+def test_rutas_del_qr_no_existen(base, client, ruta):
+    ingresar(client)
+    assert client.get(ruta).status_code == 404
+
+
+def test_difusion_solo_redes(base, client):
+    ingresar(client)
+    html = client.get("/panel/difusion").get_data(as_text=True)
+    assert "origen=whatsapp" in html and "origen=facebook" in html
+    assert "QR" not in html and "cartel" not in html.lower()
+
+
+def test_url_publica_configurable(base, client, monkeypatch):
+    monkeypatch.setenv("PUBLIC_URL", "https://encuesta.ejemplo.com/")
+    ingresar(client)
+    assert "https://encuesta.ejemplo.com/?origen=whatsapp" in client.get("/panel/difusion").get_data(as_text=True)

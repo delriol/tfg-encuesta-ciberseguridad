@@ -175,4 +175,3 @@ def difusion():
         "Facebook": url_publica("encuesta.portada", origen="facebook"),
     }
     return render_template("panel_difusion.html", enlaces=enlaces, modo_prueba=False)
-

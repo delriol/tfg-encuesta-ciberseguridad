@@ -43,6 +43,7 @@ def downgrade():
     with op.batch_alter_table('respuesta', schema=None) as batch_op:
         batch_op.add_column(sa.Column('desde_qr', sa.Boolean(), nullable=False,
                                       server_default=sa.false()))
+    op.execute("UPDATE respuesta SET desde_qr = (origen_id IN (SELECT id FROM origen WHERE codigo = 'qr'))")
     op.create_table('visita_qr',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('fecha_hora', sa.DateTime(timezone=True), nullable=False),

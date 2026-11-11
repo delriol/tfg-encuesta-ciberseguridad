@@ -64,6 +64,11 @@ def test_flujo_completo(base, client):
     assert p1.texto_libre.startswith("Quiero")
 
 
+def test_origen_qr_ya_no_existe(base, client):
+    aceptar(client, "qr")
+    assert Respuesta.query.one().origen.codigo == "directo"
+
+
 def test_origen_desconocido_es_directo(base, client):
     aceptar(client, "instagram")
     assert Respuesta.query.one().origen.codigo == "directo"
