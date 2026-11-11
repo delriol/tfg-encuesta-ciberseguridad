@@ -2,20 +2,17 @@
 from datetime import datetime, timedelta, timezone
 from functools import wraps
 
-import io
 import os
 
-import segno
 from flask import (Blueprint, Response, abort, flash, redirect, render_template, request, session,
                    url_for)
-from markupsafe import Markup
 from sqlalchemy import func
 from werkzeug.security import check_password_hash
 
 from . import db
 from .estado import PRUEBA, _utc, configuracion, estado_encuesta
-from .exportar import ARGENTINA, csv_puntajes, csv_respuestas, csv_visitas, hora_argentina
-from .models import DetalleRespuesta, Origen, Rechazo, Respuesta, UsuarioAdmin, VisitaQR
+from .exportar import ARGENTINA, csv_puntajes, csv_respuestas, hora_argentina
+from .models import DetalleRespuesta, Origen, Rechazo, Respuesta, UsuarioAdmin
 
 bp = Blueprint("panel", __name__, url_prefix="/panel")
 
@@ -76,9 +73,6 @@ def indicadores():
                       .join(Respuesta, Respuesta.origen_id == Origen.id)
                       .filter(Respuesta.enviada_en.isnot(None)).group_by(Origen.codigo).all())
     rechazos = dict(db.session.query(Rechazo.motivo, func.count(Rechazo.id)).group_by(Rechazo.motivo).all())
-    visitas = VisitaQR.query.count()
-    visitantes = db.session.query(func.count(func.distinct(VisitaQR.token_visitante))).scalar() or 0
-    desde_qr = enviadas.filter(Respuesta.desde_qr.is_(True)).count()
     duraciones = [(r.enviada_en - r.iniciada_en).total_seconds() for r in enviadas.all()]
     duraciones.sort()
     mediana = duraciones[len(duraciones) // 2] / 60 if duraciones else None
@@ -86,10 +80,7 @@ def indicadores():
     por_dia = {}
     for r in enviadas.all():
         dia = _utc(r.enviada_en).astimezone(ARGENTINA).date()
-        por_dia.setdefault(dia, [0, 0])[0] += 1
-    for v in VisitaQR.query.all():
-        dia = _utc(v.fecha_hora).astimezone(ARGENTINA).date()
-        por_dia.setdefault(dia, [0, 0])[1] += 1
+        por_dia[dia] = por_dia.get(dia, 0) + 1
 
     cfg = configuracion()
     dias_publicada = None
@@ -102,10 +93,6 @@ def indicadores():
         "por_origen": por_origen,
         "rechazo_no_acepta": rechazos.get("no_acepta", 0),
         "rechazo_menor": rechazos.get("menor", 0),
-        "visitas_qr": visitas,
-        "visitantes_qr": visitantes,
-        "enviadas_desde_qr": desde_qr,
-        "conversion_qr": round(desde_qr / visitantes * 100, 1) if visitantes else None,
         "mediana_minutos": round(mediana, 1) if mediana is not None else None,
         "por_dia": sorted(por_dia.items()),
         "dias_publicada": dias_publicada,
@@ -140,12 +127,6 @@ def exportar_puntajes():
     return _descarga(csv_puntajes(), "puntajes")
 
 
-@bp.get("/exportar/visitas.csv")
-@requiere_admin
-def exportar_visitas():
-    return _descarga(csv_visitas(), "visitas-qr")
-
-
 @bp.post("/publicar")
 @requiere_admin
 def publicar():
@@ -159,7 +140,6 @@ def publicar():
     DetalleRespuesta.query.delete()
     Respuesta.query.delete()
     Rechazo.query.delete()
-    VisitaQR.query.delete()
     cfg.fecha_publicacion = datetime.now(timezone.utc)
     cfg.encuesta_abierta = True
     db.session.commit()
@@ -187,41 +167,12 @@ def url_publica(endpoint, **valores):
     return base + ruta if base else url_for(endpoint, _external=True, _scheme="https", **valores)
 
 
-def _codigo_qr():
-    return segno.make(url_publica("qr.pagina_qr"), error="h")
-
-
 @bp.get("/difusion")
 @requiere_admin
 def difusion():
     enlaces = {
-        "Cartel (código QR)": url_publica("qr.pagina_qr"),
         "WhatsApp": url_publica("encuesta.portada", origen="whatsapp"),
         "Facebook": url_publica("encuesta.portada", origen="facebook"),
     }
     return render_template("panel_difusion.html", enlaces=enlaces, modo_prueba=False)
 
-
-@bp.get("/codigo-qr.png")
-@requiere_admin
-def codigo_qr_png():
-    buf = io.BytesIO()
-    _codigo_qr().save(buf, kind="png", scale=20, border=4)
-    return Response(buf.getvalue(), mimetype="image/png",
-                    headers={"Content-Disposition": "attachment; filename=codigo-qr-tfg.png"})
-
-
-@bp.get("/codigo-qr.svg")
-@requiere_admin
-def codigo_qr_svg():
-    buf = io.BytesIO()
-    _codigo_qr().save(buf, kind="svg", scale=10, border=4)
-    return Response(buf.getvalue(), mimetype="image/svg+xml",
-                    headers={"Content-Disposition": "attachment; filename=codigo-qr-tfg.svg"})
-
-
-@bp.get("/cartel")
-@requiere_admin
-def cartel():
-    svg = _codigo_qr().svg_inline(scale=12, border=2, omitsize=True)
-    return render_template("cartel.html", qr=Markup(svg))

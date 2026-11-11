@@ -57,16 +57,11 @@ def test_flujo_completo(base, client):
     assert resp.headers["Location"].endswith("/gracias")
     r = Respuesta.query.one()
     assert r.enviada_en is not None
-    assert r.origen.codigo == "whatsapp" and not r.desde_qr
+    assert r.origen.codigo == "whatsapp"
     q1 = {d.opcion.codigo for d in r.detalles if d.item_codigo == "Q1"}
     assert q1 == {"S1", "S2", "G1"}
     p1 = [d for d in r.detalles if d.item_codigo == "P1"][0]
     assert p1.texto_libre.startswith("Quiero")
-
-
-def test_origen_qr_marca_desde_qr(base, client):
-    aceptar(client, "qr")
-    assert Respuesta.query.one().desde_qr
 
 
 def test_origen_desconocido_es_directo(base, client):

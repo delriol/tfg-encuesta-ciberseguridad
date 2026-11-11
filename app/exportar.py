@@ -3,7 +3,7 @@ import csv
 import io
 from zoneinfo import ZoneInfo
 
-from .models import Item, Respuesta, VisitaQR
+from .models import Item, Respuesta
 from .puntajes import puntajes_de
 
 ARGENTINA = ZoneInfo("America/Argentina/Buenos_Aires")
@@ -53,11 +53,11 @@ def _por_item(r):
 
 def _base(r):
     duracion = int((r.enviada_en - r.iniciada_en).total_seconds()) if r.enviada_en else ""
-    return [r.id, r.origen.codigo, int(r.desde_qr), hora_argentina(r.iniciada_en),
+    return [r.id, r.origen.codigo, hora_argentina(r.iniciada_en),
             hora_argentina(r.enviada_en), duracion, r.version_consentimiento]
 
 
-BASE = ["id", "origen", "desde_qr", "iniciada_en", "enviada_en", "duracion_segundos", "version_consentimiento"]
+BASE = ["id", "origen", "iniciada_en", "enviada_en", "duracion_segundos", "version_consentimiento"]
 
 
 def csv_respuestas():
@@ -105,8 +105,3 @@ def csv_puntajes():
         encabezado = BASE + generales + [f"D5_{c}" for c in d5] + list(puntajes_de({}, items).keys())
     return _csv(filas, encabezado)
 
-
-def csv_visitas():
-    filas = [[v.id, hora_argentina(v.fecha_hora), str(v.token_visitante)]
-             for v in VisitaQR.query.order_by(VisitaQR.fecha_hora).all()]
-    return _csv(filas, ["id", "fecha_hora", "visitante"])
