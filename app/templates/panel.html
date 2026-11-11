@@ -24,13 +24,11 @@
 <div class="row g-2 mb-3">
   <div class="col-6 col-md-3"><div class="card card-body"><div class="small text-secondary">Respuestas enviadas</div><div class="fs-3 fw-semibold">{{ ind.enviadas }}</div></div></div>
   <div class="col-6 col-md-3"><div class="card card-body"><div class="small text-secondary">Empezadas sin enviar</div><div class="fs-3 fw-semibold">{{ ind.sin_enviar }}</div></div></div>
-  <div class="col-6 col-md-3"><div class="card card-body"><div class="small text-secondary">Visitas al QR</div><div class="fs-3 fw-semibold">{{ ind.visitas_qr }}</div><div class="small">{{ ind.visitantes_qr }} visitantes únicos</div></div></div>
-  <div class="col-6 col-md-3"><div class="card card-body"><div class="small text-secondary">QR → encuesta</div><div class="fs-3 fw-semibold">{{ ind.conversion_qr if ind.conversion_qr is not none else "–" }}{% if ind.conversion_qr is not none %}%{% endif %}</div><div class="small">{{ ind.enviadas_desde_qr }} enviadas desde el QR</div></div></div>
 </div>
 
 <table class="table table-sm bg-white">
   <tbody>
-    <tr><th>Enviadas por origen</th><td>QR {{ ind.por_origen.get('qr', 0) }} · WhatsApp {{ ind.por_origen.get('whatsapp', 0) }} · Facebook {{ ind.por_origen.get('facebook', 0) }} · Directo {{ ind.por_origen.get('directo', 0) }}</td></tr>
+    <tr><th>Enviadas por origen</th><td>WhatsApp {{ ind.por_origen.get('whatsapp', 0) }} · Facebook {{ ind.por_origen.get('facebook', 0) }} · Directo {{ ind.por_origen.get('directo', 0) }}</td></tr>
     <tr><th>No aceptaron</th><td>{{ ind.rechazo_no_acepta }}</td></tr>
     <tr><th>Menores de 18</th><td>{{ ind.rechazo_menor }}</td></tr>
     <tr><th>Tiempo de respuesta (mediana)</th><td>{{ ind.mediana_minutos if ind.mediana_minutos is not none else "–" }} min</td></tr>
@@ -40,8 +38,8 @@
 {% if ind.por_dia %}
 <h2 class="h6">Por día</h2>
 <table class="table table-sm bg-white">
-  <thead><tr><th>Día</th><th>Respuestas</th><th>Visitas QR</th></tr></thead>
-  <tbody>{% for dia, c in ind.por_dia %}<tr><td>{{ dia.strftime("%d/%m") }}</td><td>{{ c[0] }}</td><td>{{ c[1] }}</td></tr>{% endfor %}</tbody>
+  <thead><tr><th>Día</th><th>Respuestas</th></tr></thead>
+  <tbody>{% for dia, c in ind.por_dia %}<tr><td>{{ dia.strftime("%d/%m") }}</td><td>{{ c }}</td></tr>{% endfor %}</tbody>
 </table>
 {% endif %}
 
@@ -49,8 +47,7 @@
 <div class="d-flex flex-wrap gap-2 mb-4">
   <a class="btn btn-outline-primary" href="{{ url_for('panel.exportar_respuestas') }}">Respuestas en crudo (CSV)</a>
   <a class="btn btn-outline-primary" href="{{ url_for('panel.exportar_puntajes') }}">Puntajes e índices (CSV)</a>
-  <a class="btn btn-outline-primary" href="{{ url_for('panel.exportar_visitas') }}">Visitas al QR (CSV)</a>
-  <a class="btn btn-outline-secondary" href="{{ url_for('panel.difusion') }}">Enlaces, código QR y cartel</a>
+  <a class="btn btn-outline-secondary" href="{{ url_for('panel.difusion') }}">Enlaces de difusión</a>
 </div>
 
 {% if estado == "prueba" %}

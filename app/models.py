@@ -12,7 +12,7 @@ def ahora_utc():
 class Origen(db.Model):
     __tablename__ = "origen"
     id = db.Column(db.Integer, primary_key=True)
-    codigo = db.Column(db.String(20), unique=True, nullable=False)  # qr, whatsapp, facebook, directo
+    codigo = db.Column(db.String(20), unique=True, nullable=False)  # whatsapp, facebook, directo
     nombre = db.Column(db.String(50), nullable=False)
 
 
@@ -57,7 +57,6 @@ class Respuesta(db.Model):
     __tablename__ = "respuesta"
     id = db.Column(db.Integer, primary_key=True)
     origen_id = db.Column(db.Integer, db.ForeignKey("origen.id"), nullable=False)
-    desde_qr = db.Column(db.Boolean, nullable=False, default=False)
     token_navegador = db.Column(db.Uuid, unique=True, nullable=False, default=uuid.uuid4)
     version_consentimiento = db.Column(db.String(10), nullable=False)
     iniciada_en = db.Column(db.DateTime(timezone=True), nullable=False, default=ahora_utc)
@@ -95,14 +94,6 @@ class Rechazo(db.Model):
     origen = db.relationship("Origen")
 
     __table_args__ = (db.CheckConstraint("motivo IN ('no_acepta','menor')", name="ck_rechazo_motivo"),)
-
-
-class VisitaQR(db.Model):
-    """Un ingreso a la página del QR. token_visitante permite contar visitantes únicos."""
-    __tablename__ = "visita_qr"
-    id = db.Column(db.Integer, primary_key=True)
-    fecha_hora = db.Column(db.DateTime(timezone=True), nullable=False, default=ahora_utc, index=True)
-    token_visitante = db.Column(db.Uuid, nullable=False, index=True)
 
 
 class Configuracion(db.Model):

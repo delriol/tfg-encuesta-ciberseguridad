@@ -9,7 +9,6 @@ from .models import Configuracion, Item, Opcion, Origen, Respuesta
 RUTA_CATALOGO = Path(__file__).resolve().parent.parent / "data" / "cuestionario_v03.json"
 
 ORIGENES = [
-    ("qr", "Código QR de los carteles"),
     ("whatsapp", "Enlace difundido por WhatsApp"),
     ("facebook", "Enlace difundido por Facebook"),
     ("directo", "Enlace sin etiqueta"),

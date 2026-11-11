@@ -1,6 +1,5 @@
 import csv
 import io
-import uuid
 from datetime import datetime, timedelta, timezone
 
 import pytest
@@ -8,7 +7,7 @@ from werkzeug.security import generate_password_hash
 
 from app import db
 from app.catalogo import cargar_catalogo, sembrar_base
-from app.models import Configuracion, Item, Rechazo, Respuesta, UsuarioAdmin, VisitaQR
+from app.models import Configuracion, Item, Rechazo, Respuesta, UsuarioAdmin
 from app.puntajes import nivel, puntajes_de
 from tests.test_encuesta import aceptar, respuestas_validas
 
@@ -79,21 +78,16 @@ def test_sesion_vence(base, client):
 # --- indicadores y exportación ------------------------------------------
 
 def test_indicadores(base, client):
-    responder(base, "qr")
+    responder(base, "facebook")
     responder(base, "whatsapp")
     c = base.test_client()
     aceptar(c)  # empezó y no envió
     c.post("/consentimiento", data={"accion": "no_participar"})
-    t = uuid.uuid4()
-    db.session.add_all([VisitaQR(token_visitante=t), VisitaQR(token_visitante=t),
-                        VisitaQR(token_visitante=uuid.uuid4())])
-    db.session.commit()
     ingresar(client)
     html = client.get("/panel").get_data(as_text=True)
     assert ">2<" in html  # enviadas
-    assert "2 visitantes únicos" in html
-    assert "50.0%" in html  # 1 enviada desde QR / 2 visitantes únicos
-    assert "QR 1 · WhatsApp 1" in html
+    assert "WhatsApp 1 · Facebook 1 · Directo 0" in html
+    assert "QR" not in html
 
 
 def test_csv_respuestas(base, client):
@@ -102,7 +96,7 @@ def test_csv_respuestas(base, client):
     filas = leer_csv(client.get("/panel/exportar/respuestas.csv"))
     assert len(filas) == 1
     f = filas[0]
-    assert f["origen"] == "facebook" and f["desde_qr"] == "0"
+    assert f["origen"] == "facebook" and "desde_qr" not in f
     assert f["Q1_S1"] == "1" and f["Q1_G2"] == "1" and f["Q1_S2"] == "0"
     assert f["D5_1"] == "1" and f["D5_2"] == "0" and f["D5_3"] == "1"
     assert f["E1_8"] == "1" and f["E1_1"] == "0"
@@ -146,25 +140,17 @@ def test_puntajes_a_mano():
     assert nivel(p["ICC"]) == "bajo" and nivel(60) == "medio" and nivel(80) == "bueno"
 
 
-def test_csv_visitas(base, client):
-    db.session.add(VisitaQR(token_visitante=uuid.uuid4()))
-    db.session.commit()
-    ingresar(client)
-    assert len(leer_csv(client.get("/panel/exportar/visitas.csv"))) == 1
-
-
 # --- publicar -------------------------------------------------------------
 
 def test_publicar_borra_pruebas(base, client):
     responder(base)
     db.session.add(Rechazo(motivo="menor", origen_id=1))
-    db.session.add(VisitaQR(token_visitante=uuid.uuid4()))
     db.session.commit()
     ingresar(client)
     client.post("/panel/publicar", data={"confirmacion": "publicar"})
     cfg = db.session.get(Configuracion, 1)
     assert cfg.fecha_publicacion is not None and cfg.encuesta_abierta
-    assert Respuesta.query.count() == 0 and Rechazo.query.count() == 0 and VisitaQR.query.count() == 0
+    assert Respuesta.query.count() == 0 and Rechazo.query.count() == 0
     assert Item.query.count() == 40  # el cuestionario queda
     assert client.post("/panel/publicar", data={"confirmacion": "PUBLICAR"}).status_code == 409
 
@@ -183,3 +169,25 @@ def test_pausar_y_reanudar(base, client):
     assert "cerró" in base.test_client().get("/").get_data(as_text=True)
     client.post("/panel/estado", data={"abrir": "si"})
     assert "Comenzar la encuesta" in base.test_client().get("/").get_data(as_text=True)
+
+
+# --- sin experimento QR ---------------------------------------------------
+
+@pytest.mark.parametrize("ruta", ["/qr", "/panel/cartel", "/panel/codigo-qr.png", "/panel/codigo-qr.svg",
+                                  "/panel/exportar/visitas.csv"])
+def test_rutas_del_qr_no_existen(base, client, ruta):
+    ingresar(client)
+    assert client.get(ruta).status_code == 404
+
+
+def test_difusion_solo_redes(base, client):
+    ingresar(client)
+    html = client.get("/panel/difusion").get_data(as_text=True)
+    assert "origen=whatsapp" in html and "origen=facebook" in html
+    assert "QR" not in html and "cartel" not in html.lower()
+
+
+def test_url_publica_configurable(base, client, monkeypatch):
+    monkeypatch.setenv("PUBLIC_URL", "https://encuesta.ejemplo.com/")
+    ingresar(client)
+    assert "https://encuesta.ejemplo.com/?origen=whatsapp" in client.get("/panel/difusion").get_data(as_text=True)
