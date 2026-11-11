@@ -141,8 +141,15 @@ def test_honeypot_descarta(base, client):
     assert Respuesta.query.one().enviada_en is None
 
 
-def test_menor_de_18(base, client):
+def test_sin_indicar_edad_no_cuenta_como_menor(base, client):
     resp = client.post("/consentimiento", data={"acepta": "si", "accion": "comenzar"})
+    assert resp.status_code == 400
+    assert "indicá si tenés 18" in resp.get_data(as_text=True)
+    assert Rechazo.query.count() == 0 and Respuesta.query.count() == 0
+
+
+def test_menor_de_18(base, client):
+    resp = client.post("/consentimiento", data={"mayor_18": "no", "acepta": "si", "accion": "comenzar"})
     assert "solo para personas de 18" in resp.get_data(as_text=True)
     assert Rechazo.query.one().motivo == "menor"
     assert Respuesta.query.count() == 0

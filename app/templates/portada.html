@@ -37,10 +37,17 @@
   <div class="tarjeta-cuerpo">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
     <div class="consentimiento mb-3">
-      <div class="form-check mb-2">
-        <input class="form-check-input" type="checkbox" name="mayor_18" value="si" id="mayor_18">
-        <label class="form-check-label" for="mayor_18">Tengo 18 años o más.</label>
-      </div>
+      <fieldset class="mb-3">
+        <legend class="fs-6 fw-semibold mb-2">¿Tenés 18 años o más?</legend>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="mayor_18" value="si" id="mayor_18_si">
+          <label class="form-check-label" for="mayor_18_si">Sí</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="mayor_18" value="no" id="mayor_18_no">
+          <label class="form-check-label" for="mayor_18_no">No</label>
+        </div>
+      </fieldset>
       <div class="form-check">
         <input class="form-check-input" type="checkbox" name="acepta" value="si" id="acepta">
         <label class="form-check-label" for="acepta">Leí la información y acepto participar.</label>

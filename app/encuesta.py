@@ -72,7 +72,7 @@ def consentimiento():
         return redirect(url_for("encuesta.portada"))
 
     accion = request.form.get("accion")
-    mayor = request.form.get("mayor_18") == "si"
+    edad = request.form.get("mayor_18")  # "si", "no" o vacío si no eligió
     acepta = request.form.get("acepta") == "si"
 
     if accion == "no_participar":
@@ -81,10 +81,14 @@ def consentimiento():
         return render_template("sin_participar.html", motivo="no_acepta", **_contexto())
     if accion != "comenzar":
         return redirect(url_for("encuesta.portada"))
-    if not mayor:
+    if edad == "no":
         db.session.add(Rechazo(motivo="menor", origen=_origen_actual()))
         db.session.commit()
         return render_template("sin_participar.html", motivo="menor", **_contexto())
+    if edad != "si":
+        # Antes, no marcar la casilla contaba como menor de 18: ahora se pide la respuesta.
+        return render_template("portada.html", error="Para comenzar indicá si tenés 18 años o más.",
+                               **_contexto()), 400
     if not acepta:
         return render_template("portada.html", error="Para comenzar tenés que aceptar participar.",
                                **_contexto()), 400
