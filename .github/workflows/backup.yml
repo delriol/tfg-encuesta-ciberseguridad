@@ -19,7 +19,8 @@ jobs:
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           BACKUP_PASSPHRASE: ${{ secrets.BACKUP_PASSPHRASE }}
-        # bash explícito = -eo pipefail: si pg_dump falla, el paso falla (antes quedaba en verde con un archivo vacío).
+        # Con shell bash, GitHub usa "-eo pipefail": si pg_dump falla, el paso falla
+        # y no queda una copia vacía dada por buena.
         shell: bash
         run: |
           test -n "$DATABASE_URL" && test -n "$BACKUP_PASSPHRASE"

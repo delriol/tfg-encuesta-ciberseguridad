@@ -1,4 +1,14 @@
-"""Rutas públicas de la encuesta: portada, consentimiento, cuestionario y cierre."""
+"""Rutas públicas de la encuesta: portada, consentimiento, cuestionario y cierre.
+
+Recorrido de una persona:
+
+1. Entra a la portada (/), opcionalmente con ?origen=whatsapp o ?origen=facebook.
+2. Indica si es mayor de 18 y acepta participar (/consentimiento). Recién ahí
+   se crea su registro y se le asigna una cookie que identifica al navegador.
+3. Completa el cuestionario (/encuesta), que se valida en el servidor.
+4. Ve el agradecimiento (/gracias). Si vuelve a entrar, se le avisa que ya
+   respondió.
+"""
 import uuid
 from datetime import datetime, timezone
 
@@ -13,18 +23,23 @@ from .validacion import items_del_catalogo, validar_envio
 
 bp = Blueprint("encuesta", __name__)
 
+# Cookie que guarda el identificador al azar de la participación (sin datos personales).
 COOKIE = "tfg_participante"
 DURACION_COOKIE = 60 * 60 * 24 * 60  # 60 días: cubre toda la recolección
 ORIGENES_VALIDOS = {"whatsapp", "facebook"}
-HONEYPOT = "sitio_web"  # campo oculto: si viene completo, es un bot
+# Campo trampa ("honeypot"): está oculto para las personas, así que si llega
+# completo lo llenó un programa automático y el envío se descarta.
+HONEYPOT = "sitio_web"
 
 
 def _origen_actual():
+    """Origen guardado en la sesión al entrar a la portada; si no hay, "directo"."""
     codigo = session.get("origen", "directo")
     return Origen.query.filter_by(codigo=codigo).first() or Origen.query.filter_by(codigo="directo").one()
 
 
 def _respuesta_del_navegador():
+    """Busca la participación asociada a la cookie de este navegador (o None)."""
     valor = request.cookies.get(COOKIE)
     if not valor:
         return None
@@ -36,15 +51,22 @@ def _respuesta_del_navegador():
 
 
 def _contexto():
+    """Datos comunes a todas las páginas: si se muestra el aviso de modo prueba."""
     return {"modo_prueba": estado_encuesta() == PRUEBA}
 
 
 def _secciones():
+    """Títulos de las secciones del cuestionario, tomados del archivo JSON."""
     return leer_catalogo()["secciones"]
 
 
 @bp.get("/")
 def portada():
+    """Página de inicio con la presentación y el consentimiento.
+
+    Registra el origen del enlace y deriva según el caso: encuesta cerrada,
+    persona que ya respondió o persona que empezó y no terminó.
+    """
     origen = request.args.get("origen", "").lower()
     if origen in ORIGENES_VALIDOS:
         session["origen"] = origen
@@ -65,6 +87,12 @@ def portada():
 
 @bp.post("/consentimiento")
 def consentimiento():
+    """Procesa la respuesta de la portada.
+
+    - "No participar": se registra el rechazo y se agradece.
+    - Menor de 18: se registra el rechazo y no se continúa.
+    - Mayor de 18 y acepta: se crea la participación y se pasa al cuestionario.
+    """
     if estado_encuesta() == CERRADA:
         return redirect(url_for("encuesta.portada"))
     previa = _respuesta_del_navegador()
@@ -86,7 +114,7 @@ def consentimiento():
         db.session.commit()
         return render_template("sin_participar.html", motivo="menor", **_contexto())
     if edad != "si":
-        # Antes, no marcar la casilla contaba como menor de 18: ahora se pide la respuesta.
+        # Si no eligió Sí ni No, se le pide que conteste; no se cuenta como menor.
         return render_template("portada.html", error="Para comenzar indicá si tenés 18 años o más.",
                                **_contexto()), 400
     if not acepta:
@@ -106,6 +134,11 @@ def consentimiento():
 
 @bp.route("/encuesta", methods=["GET", "POST"])
 def cuestionario():
+    """Muestra el cuestionario (GET) y guarda las respuestas (POST).
+
+    Si hay errores se vuelve a mostrar con lo ya contestado y un aviso en cada
+    pregunta con problemas. Cada participación se puede enviar una sola vez.
+    """
     if estado_encuesta() == CERRADA:
         return redirect(url_for("encuesta.portada"))
     r = _respuesta_del_navegador()
@@ -133,6 +166,7 @@ def cuestionario():
     if marcadas != 1:
         db.session.rollback()
         return render_template("ya_respondiste.html", **_contexto())
+    # Se guarda una fila por opción elegida, o el texto de la pregunta abierta.
     for codigo, valor in elegidas.items():
         if isinstance(valor, str):
             db.session.add(DetalleRespuesta(respuesta_id=r.id, item_codigo=codigo, texto_libre=valor))
@@ -145,4 +179,5 @@ def cuestionario():
 
 @bp.get("/gracias")
 def gracias():
+    """Página de agradecimiento al terminar."""
     return render_template("gracias.html", **_contexto())

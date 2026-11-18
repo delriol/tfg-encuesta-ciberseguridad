@@ -1,4 +1,10 @@
-"""Carga del cuestionario (data/cuestionario_v03.json) y datos iniciales."""
+"""Carga del cuestionario y de los datos iniciales de la base.
+
+Las preguntas y sus opciones no están escritas en el código ni en las
+plantillas: se definen en ``data/cuestionario_v03.json`` (copia fiel del
+cuestionario del TFG) y se cargan en la base con el comando
+``flask --app wsgi preparar-base``.
+"""
 import json
 from datetime import datetime, timezone
 from pathlib import Path
@@ -8,6 +14,8 @@ from .models import Configuracion, Item, Opcion, Origen, Respuesta
 
 RUTA_CATALOGO = Path(__file__).resolve().parent.parent / "data" / "cuestionario_v03.json"
 
+# Canales por los que se difundió el enlace. El enlace lleva ?origen=whatsapp
+# o ?origen=facebook; si no trae etiqueta, la respuesta se cuenta como "directo".
 ORIGENES = [
     ("whatsapp", "Enlace difundido por WhatsApp"),
     ("facebook", "Enlace difundido por Facebook"),
@@ -17,17 +25,26 @@ ORIGENES = [
 # Lunes 16/11/2026 23:59:59 en Argentina (UTC-3) = 17/11/2026 02:59:59 UTC.
 FECHA_CIERRE = datetime(2026, 11, 17, 2, 59, 59, tzinfo=timezone.utc)
 
-# Opciones que excluyen a las demás de su pregunta.
+# Opciones que excluyen a las demás de su pregunta: (pregunta, opción).
+# E1 opción 8 = "Ninguno".
 EXCLUYENTES = {("E1", "8")}
 
 
 def leer_catalogo(ruta=RUTA_CATALOGO):
+    """Lee el archivo JSON del cuestionario."""
     with open(ruta, encoding="utf-8") as f:
         return json.load(f)
 
 
 def cargar_catalogo(ruta=RUTA_CATALOGO):
-    """Inserta o actualiza preguntas y opciones. Se niega si ya hay respuestas guardadas."""
+    """Inserta o actualiza preguntas y opciones en la base.
+
+    Se puede correr varias veces: actualiza lo que ya existe y borra preguntas
+    que ya no están en el archivo. Se niega (RuntimeError) si ya hay respuestas
+    guardadas, para que el cuestionario no cambie durante la recolección.
+
+    Devuelve (cantidad de preguntas, cantidad de opciones).
+    """
     if db.session.query(Respuesta.id).first() is not None:
         raise RuntimeError("Ya hay respuestas guardadas: el catálogo no se puede modificar.")
     datos = leer_catalogo(ruta)
@@ -63,7 +80,11 @@ def cargar_catalogo(ruta=RUTA_CATALOGO):
 
 
 def sembrar_base():
-    """Orígenes y fila de configuración. Se puede correr varias veces."""
+    """Carga los orígenes y la fila de configuración, si todavía no existen.
+
+    La encuesta arranca en modo prueba (sin fecha de publicación) y con la
+    fecha de cierre fijada. Se puede correr varias veces sin duplicar datos.
+    """
     for codigo, nombre in ORIGENES:
         if not Origen.query.filter_by(codigo=codigo).first():
             db.session.add(Origen(codigo=codigo, nombre=nombre))

@@ -1,3 +1,4 @@
+{# Cuestionario completo, dividido en secciones. encuesta.js las muestra de a una. #}
 {% extends "base.html" %}
 {% macro marcado(item, op) -%}
   {%- if valores and op.codigo in valores.getlist(item.codigo) %}checked{% endif -%}

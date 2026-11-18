@@ -1,3 +1,4 @@
+"""Pruebas del recorrido de la encuesta: consentimiento, validación, envío y estados."""
 from datetime import datetime, timedelta, timezone
 
 import pytest
@@ -9,10 +10,23 @@ from app.encuesta import COOKIE
 from app.models import Configuracion, DetalleRespuesta, Item, Rechazo, Respuesta
 
 
+def cierre_en_el_futuro():
+    """Corre la fecha de cierre 30 días hacia adelante.
+
+    La fecha real de cierre (16/11/2026) ya pasó; sin este ajuste la encuesta
+    figuraría cerrada y no se podría probar el recorrido completo.
+    """
+    cfg = db.session.get(Configuracion, 1)
+    cfg.fecha_cierre = datetime.now(timezone.utc) + timedelta(days=30)
+    db.session.commit()
+
+
 @pytest.fixture
 def base(app):
+    """Base de prueba con el cuestionario cargado y la encuesta en modo prueba."""
     sembrar_base()
     cargar_catalogo()
+    cierre_en_el_futuro()
     return app
 
 
