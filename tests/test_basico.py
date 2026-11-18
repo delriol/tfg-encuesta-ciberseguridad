@@ -1,3 +1,4 @@
+"""Pruebas básicas: la web responde, el chequeo de salud y las cabeceras de seguridad."""
 import pytest
 
 from app import create_app

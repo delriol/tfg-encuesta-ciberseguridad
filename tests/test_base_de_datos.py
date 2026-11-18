@@ -1,3 +1,4 @@
+"""Pruebas del catálogo: el cuestionario cargado coincide con el instrumento v03."""
 import uuid
 
 import pytest

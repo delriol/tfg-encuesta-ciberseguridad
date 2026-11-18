@@ -1,3 +1,10 @@
+"""Creación y configuración de la aplicación web de la encuesta.
+
+La aplicación sigue el patrón *application factory* de Flask: la función
+``create_app`` arma una instancia nueva con su configuración, la base de datos,
+la protección CSRF de los formularios, los comandos de consola y las dos partes
+del sistema (la encuesta pública y el panel del investigador).
+"""
 from flask import Flask
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
@@ -5,12 +12,22 @@ from flask_wtf.csrf import CSRFProtect
 from sqlalchemy import text
 from werkzeug.middleware.proxy_fix import ProxyFix
 
-db = SQLAlchemy()
-migrate = Migrate()
-csrf = CSRFProtect()
+# Extensiones compartidas por todo el sistema. Se crean acá sin aplicación
+# y se asocian a ella dentro de create_app().
+db = SQLAlchemy()        # acceso a la base de datos (ORM)
+migrate = Migrate()      # migraciones del esquema (carpeta migrations/)
+csrf = CSRFProtect()     # token anti-CSRF en todos los formularios POST
 
 
 def create_app(config_object="app.config.Config"):
+    """Crea la aplicación Flask lista para usar.
+
+    config_object: clase de configuración a cargar. En producción es
+    ``Config``; las pruebas automáticas usan ``TestConfig``.
+
+    Si falta alguna variable de entorno obligatoria se corta el arranque con un
+    mensaje claro, en lugar de fallar más tarde con un error difícil de entender.
+    """
     app = Flask(__name__)
     app.config.from_object(config_object)
     if not app.config.get("SECRET_KEY"):
@@ -40,6 +57,16 @@ def create_app(config_object="app.config.Config"):
 
     @app.after_request
     def cabeceras_de_seguridad(resp):
+        """Agrega cabeceras HTTP de seguridad a todas las respuestas.
+
+        - HSTS: el navegador usa siempre HTTPS con este sitio.
+        - nosniff: el navegador no adivina el tipo de los archivos.
+        - X-Frame-Options y frame-ancestors: la web no se puede incrustar en
+          otra página (protege contra el *clickjacking*).
+        - Referrer-Policy: no se informa a sitios externos desde qué página se llegó.
+        - Content-Security-Policy: solo se cargan estilos, scripts e imágenes
+          del propio sitio.
+        """
         resp.headers.setdefault("Strict-Transport-Security", "max-age=31536000; includeSubDomains")
         resp.headers.setdefault("X-Content-Type-Options", "nosniff")
         resp.headers.setdefault("X-Frame-Options", "DENY")
@@ -52,7 +79,11 @@ def create_app(config_object="app.config.Config"):
 
     @app.get("/salud")
     def salud():
-        # Lo consulta UptimeRobot cada 5 minutos: responde 200 solo si la base contesta.
+        """Chequeo de funcionamiento para el monitoreo externo.
+
+        Lo consultan Render y UptimeRobot (cada 5 minutos). Responde 200 solo si
+        la base de datos contesta; si no, 503, y el monitoreo envía un aviso.
+        """
         try:
             db.session.execute(text("SELECT 1"))
             return {"estado": "ok"}, 200

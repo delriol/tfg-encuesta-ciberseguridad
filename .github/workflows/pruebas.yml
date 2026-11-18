@@ -1,5 +1,7 @@
 name: Pruebas
 
+# Corre las pruebas automáticas (pytest) en cada cambio a main y en cada pull request.
+
 on:
   push:
     branches: [main]

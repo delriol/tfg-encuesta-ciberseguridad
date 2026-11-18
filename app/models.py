@@ -1,4 +1,12 @@
-"""Modelo físico de la base (8 tablas). No se guardan datos personales ni direcciones IP."""
+"""Modelo de datos: las tablas de la base y sus relaciones.
+
+Privacidad: la encuesta es anónima. No se guardan nombres, correos, direcciones
+IP ni ningún otro dato que permita identificar a quien responde. Para evitar
+respuestas repetidas se usa un identificador al azar guardado en una cookie del
+navegador (token_navegador), que no se relaciona con la persona.
+
+Las fechas se guardan en UTC y se muestran en hora argentina.
+"""
 import uuid
 from datetime import datetime, timezone
 
@@ -6,10 +14,12 @@ from . import db
 
 
 def ahora_utc():
+    """Fecha y hora actual en UTC (valor por defecto de las columnas de fecha)."""
     return datetime.now(timezone.utc)
 
 
 class Origen(db.Model):
+    """Canal por el que llegó la persona: WhatsApp, Facebook o enlace directo."""
     __tablename__ = "origen"
     id = db.Column(db.Integer, primary_key=True)
     codigo = db.Column(db.String(20), unique=True, nullable=False)  # whatsapp, facebook, directo
@@ -23,11 +33,11 @@ class Item(db.Model):
     seccion = db.Column(db.SmallInteger, nullable=False)
     orden = db.Column(db.SmallInteger, nullable=False)
     texto = db.Column(db.Text, nullable=False)
-    tipo_respuesta = db.Column(db.String(15), nullable=False)
+    tipo_respuesta = db.Column(db.String(15), nullable=False)  # ver la restricción ck_item_tipo
     obligatorio = db.Column(db.Boolean, nullable=False, default=True)
-    invertido = db.Column(db.Boolean, nullable=False, default=False)
-    suma_al_indice = db.Column(db.Boolean, nullable=False, default=False)
-    respuesta_correcta = db.Column(db.String(10))
+    invertido = db.Column(db.Boolean, nullable=False, default=False)  # escala que se da vuelta
+    suma_al_indice = db.Column(db.Boolean, nullable=False, default=False)  # False = descriptiva
+    respuesta_correcta = db.Column(db.String(10))  # código de la opción correcta, si la hay
     opciones = db.relationship("Opcion", back_populates="item", order_by="Opcion.orden",
                                cascade="all, delete-orphan")
 
@@ -39,6 +49,7 @@ class Item(db.Model):
 
 
 class Opcion(db.Model):
+    """Una opción de respuesta de una pregunta."""
     __tablename__ = "opcion"
     id = db.Column(db.Integer, primary_key=True)
     item_codigo = db.Column(db.String(10), db.ForeignKey("item.codigo"), nullable=False)
@@ -57,7 +68,7 @@ class Respuesta(db.Model):
     __tablename__ = "respuesta"
     id = db.Column(db.Integer, primary_key=True)
     origen_id = db.Column(db.Integer, db.ForeignKey("origen.id"), nullable=False)
-    token_navegador = db.Column(db.Uuid, unique=True, nullable=False, default=uuid.uuid4)
+    token_navegador = db.Column(db.Uuid, unique=True, nullable=False, default=uuid.uuid4)  # va en la cookie
     version_consentimiento = db.Column(db.String(10), nullable=False)
     iniciada_en = db.Column(db.DateTime(timezone=True), nullable=False, default=ahora_utc)
     enviada_en = db.Column(db.DateTime(timezone=True))
@@ -85,7 +96,11 @@ class DetalleRespuesta(db.Model):
 
 
 class Rechazo(db.Model):
-    """Alguien que no aceptó el consentimiento o declaró ser menor de 18. No se guarda nada más."""
+    """Alguien que no aceptó participar o declaró ser menor de 18.
+
+    Solo se guarda el motivo, el origen y la fecha, para poder informarlo en
+    las métricas de la encuesta.
+    """
     __tablename__ = "rechazo"
     id = db.Column(db.Integer, primary_key=True)
     motivo = db.Column(db.String(15), nullable=False)
@@ -97,7 +112,11 @@ class Rechazo(db.Model):
 
 
 class Configuracion(db.Model):
-    """Una sola fila (id = 1) con el estado de la encuesta."""
+    """Una sola fila (id = 1) con el estado de la encuesta.
+
+    fecha_publicacion vacía = encuesta en modo prueba. encuesta_abierta permite
+    pausarla desde el panel.
+    """
     __tablename__ = "configuracion"
     id = db.Column(db.Integer, primary_key=True)
     fecha_publicacion = db.Column(db.DateTime(timezone=True))
@@ -109,6 +128,11 @@ class Configuracion(db.Model):
 
 
 class UsuarioAdmin(db.Model):
+    """Usuario del panel del investigador.
+
+    Se guarda solo el hash de la clave. Tras 5 intentos fallidos el usuario
+    queda bloqueado 15 minutos (bloqueado_hasta).
+    """
     __tablename__ = "usuario_admin"
     id = db.Column(db.Integer, primary_key=True)
     usuario = db.Column(db.String(50), unique=True, nullable=False)

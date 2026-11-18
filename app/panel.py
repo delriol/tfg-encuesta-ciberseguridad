@@ -1,4 +1,10 @@
-"""Panel del investigador: acceso, indicadores, exportaciones y publicación."""
+"""Panel del investigador: acceso, indicadores, exportaciones y publicación.
+
+Todas las páginas, salvo la de ingreso, requieren haber iniciado sesión con el
+usuario creado por el comando ``crear-admin``. Desde el panel se ven las
+métricas de la encuesta, se descargan los datos en CSV, se publica la encuesta
+y se la puede pausar.
+"""
 from datetime import datetime, timedelta, timezone
 from functools import wraps
 
@@ -16,12 +22,17 @@ from .models import DetalleRespuesta, Origen, Rechazo, Respuesta, UsuarioAdmin
 
 bp = Blueprint("panel", __name__, url_prefix="/panel")
 
-MAX_INTENTOS = 5
-BLOQUEO = timedelta(minutes=15)
-DURACION_SESION = timedelta(hours=2)
+MAX_INTENTOS = 5                     # intentos fallidos antes de bloquear
+BLOQUEO = timedelta(minutes=15)      # tiempo de bloqueo tras esos intentos
+DURACION_SESION = timedelta(hours=2)  # después hay que volver a ingresar
 
 
 def requiere_admin(vista):
+    """Decorador para las páginas del panel.
+
+    Si no hay sesión iniciada o ya pasaron más de 2 horas desde el ingreso,
+    redirige a la página de ingreso.
+    """
     @wraps(vista)
     def envoltura(*args, **kwargs):
         inicio = session.get("admin_desde")
@@ -35,6 +46,11 @@ def requiere_admin(vista):
 
 @bp.route("/ingresar", methods=["GET", "POST"])
 def ingresar():
+    """Formulario de ingreso al panel.
+
+    El mensaje de error es el mismo si falla el usuario o la clave, para no
+    revelar qué usuarios existen. Tras 5 intentos fallidos se bloquea 15 minutos.
+    """
     error = None
     if request.method == "POST":
         ahora = datetime.now(timezone.utc)
@@ -62,11 +78,18 @@ def ingresar():
 
 @bp.post("/salir")
 def salir():
+    """Cierra la sesión del panel."""
     session.clear()
     return redirect(url_for("panel.ingresar"))
 
 
 def indicadores():
+    """Calcula las métricas que se muestran en el panel.
+
+    Enviadas, empezadas sin enviar, enviadas por origen, rechazos por motivo,
+    mediana del tiempo de respuesta (en minutos), enviadas por día (hora
+    argentina) y días que estuvo publicada.
+    """
     enviadas = Respuesta.query.filter(Respuesta.enviada_en.isnot(None))
     total_enviadas = enviadas.count()
     por_origen = dict(db.session.query(Origen.codigo, func.count(Respuesta.id))
@@ -102,6 +125,7 @@ def indicadores():
 @bp.get("")
 @requiere_admin
 def inicio():
+    """Página principal del panel con las métricas y el estado de la encuesta."""
     cfg = configuracion()
     return render_template("panel.html", ind=indicadores(), estado=estado_encuesta(), cfg=cfg,
                            publicada=hora_argentina(cfg.fecha_publicacion),
@@ -109,6 +133,7 @@ def inicio():
 
 
 def _descarga(contenido, nombre):
+    """Arma la descarga de un CSV con la fecha y hora en el nombre del archivo."""
     sello = datetime.now(ARGENTINA).strftime("%Y%m%d-%H%M")
     return Response(contenido, mimetype="text/csv; charset=utf-8",
                     headers={"Content-Disposition": f"attachment; filename={nombre}-{sello}.csv",
@@ -118,19 +143,26 @@ def _descarga(contenido, nombre):
 @bp.get("/exportar/respuestas.csv")
 @requiere_admin
 def exportar_respuestas():
+    """Descarga las respuestas en crudo (una fila por persona)."""
     return _descarga(csv_respuestas(), "respuestas")
 
 
 @bp.get("/exportar/puntajes.csv")
 @requiere_admin
 def exportar_puntajes():
+    """Descarga los puntajes e índices calculados (una fila por persona)."""
     return _descarga(csv_puntajes(), "puntajes")
 
 
 @bp.post("/publicar")
 @requiere_admin
 def publicar():
-    """Borra los datos de prueba, registra la fecha real de publicación y abre la encuesta. Una sola vez."""
+    """Publica la encuesta. Se puede hacer una sola vez.
+
+    Borra todo lo cargado en modo prueba, registra la fecha y hora real de
+    publicación y abre la encuesta. Para evitar un clic accidental hay que
+    escribir PUBLICAR en un recuadro.
+    """
     cfg = configuracion()
     if estado_encuesta() != PRUEBA:
         abort(409)
@@ -170,6 +202,7 @@ def url_publica(endpoint, **valores):
 @bp.get("/difusion")
 @requiere_admin
 def difusion():
+    """Muestra los enlaces a difundir, cada uno con su etiqueta de origen."""
     enlaces = {
         "WhatsApp": url_publica("encuesta.portada", origen="whatsapp"),
         "Facebook": url_publica("encuesta.portada", origen="facebook"),

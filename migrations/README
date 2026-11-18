@@ -1,1 +1,4 @@
-Single-database configuration for Flask.
+Migraciones de la base de datos (Alembic, a través de Flask-Migrate).
+
+Cada archivo de versions/ describe un cambio en el esquema. Para aplicarlas:
+    flask --app wsgi db upgrade

@@ -1,3 +1,4 @@
+"""Pruebas del panel: acceso, indicadores, exportación CSV, cálculo de puntajes y publicación."""
 import csv
 import io
 from datetime import datetime, timedelta, timezone
@@ -9,15 +10,17 @@ from app import db
 from app.catalogo import cargar_catalogo, sembrar_base
 from app.models import Configuracion, Item, Rechazo, Respuesta, UsuarioAdmin
 from app.puntajes import nivel, puntajes_de
-from tests.test_encuesta import aceptar, respuestas_validas
+from tests.test_encuesta import aceptar, cierre_en_el_futuro, respuestas_validas
 
 CLAVE = "una-clave-larga-de-prueba"
 
 
 @pytest.fixture
 def base(app):
+    """Base de prueba con el cuestionario cargado y un usuario del panel."""
     sembrar_base()
     cargar_catalogo()
+    cierre_en_el_futuro()
     db.session.add(UsuarioAdmin(usuario="leandro", hash_clave=generate_password_hash(CLAVE)))
     db.session.commit()
     return app
@@ -119,7 +122,7 @@ def test_csv_puntajes(base, client):
 
 
 def test_puntajes_a_mano():
-    """Un caso calculado a mano, como pide la capa 5 del plan de pruebas."""
+    """Compara el cálculo con un caso resuelto a mano (capa 5 del plan de pruebas)."""
     class I:
         def __init__(self, tipo, suma=True, correcta=None, inv=False):
             self.tipo_respuesta, self.suma_al_indice, self.respuesta_correcta, self.invertido = tipo, suma, correcta, inv
