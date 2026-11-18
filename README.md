@@ -28,6 +28,7 @@ y cerró el lunes 16/11/2026 a las 23:59 (hora argentina).
 7. [Cómo ejecutarlo en una computadora](#cómo-ejecutarlo-en-una-computadora)
 8. [Pruebas automáticas](#pruebas-automáticas)
 9. [Despliegue y operación](#despliegue-y-operación)
+10. [Uso de inteligencia artificial](#uso-de-inteligencia-artificial)
 
 ## Funcionamiento
 
@@ -227,3 +228,30 @@ GitHub Actions con cada cambio.
   ```bash
   gpg -d backup.sql.gz.gpg | gunzip | psql "<cadena de conexión>"
   ```
+
+## Uso de inteligencia artificial
+
+El desarrollo de este sistema contó con la asistencia de **Claude Code**
+(Anthropic), con el modelo Claude Opus 5.5, entre el 27 de octubre y el 17 de
+noviembre de 2026.
+
+- **Para qué se usó**: redactar la especificación funcional y técnica; escribir
+  el código (Python y Flask, plantillas, estilos, JavaScript, migraciones y
+  pruebas); configurar el despliegue, el respaldo y el monitoreo; y documentar
+  el código (comentarios y este README).
+- **Cómo se usó**: el autor definió los requisitos en español a partir del
+  cuestionario y de los objetivos del TFG, y el trabajo avanzó por fases
+  (especificación funcional, diseño técnico, desarrollo de la encuesta, textos
+  y diseño), cada una aprobada por el autor. Las decisiones de diseño y de
+  alcance fueron del autor.
+- **Revisión**: cada cambio se presentó como *pull request* y el autor lo
+  revisó y aprobó antes de incorporarlo. Los commits generados con la
+  herramienta llevan la línea `Co-Authored-By: Claude`. El funcionamiento se
+  verificó con 58 pruebas automatizadas y un recorrido manual de aceptación.
+- **Límites**: las credenciales de la base y del panel no se compartieron con
+  la herramienta; se cargaron directamente como variables de entorno en Render.
+  La responsabilidad por el sistema y su uso en la investigación es del autor.
+
+Referencia (APA 7): Anthropic. (2026). *Claude Code* (modelo Claude Opus 5.5)
+[Herramienta de programación basada en un modelo de lenguaje de gran tamaño].
+https://www.anthropic.com/claude-code
